@@ -41,10 +41,7 @@
             <groupId>org.springframework.android</groupId>
             <artifactId>spring-android-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-test</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.android</groupId>
             <artifactId>spring-android-auth</artifactId>
@@ -72,22 +69,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <configuration>
-                    <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
-                    <assetsDirectory>${project.basedir}/assets</assetsDirectory>
-                    <resourceDirectory>${project.basedir}/res</resourceDirectory>
-                    <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
-                    <sdk>
-                        <platform>7</platform>
-                    </sdk>
-                    <deleteConflictingFiles>true</deleteConflictingFiles>
-                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                </configuration>
                 <extensions>true</extensions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

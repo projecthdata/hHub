@@ -1,0 +1,31 @@
+<root xmlns="http://projecthdata.org/hdata/schemas/2009/06/core">
+    <id>1234</id>
+    <version>1</version>
+    <created>2010-02-09T05:00:00Z</created>
+    <lastModified>2010-02-09T05:00:00Z</lastModified>
+    <extensions>
+        <extension contentType="application/xml" extensionId="1">
+            http://projecthdata.org/hdata/schemas/2009/06/medication
+        </extension>
+        <extension contentType="application/xml" extensionId="2">
+            http://projecthdata.org/hdata/schemas/2009/06/patient_information
+        </extension>
+        <extension contentType="application/xml" extensionId="3">http://projecthdata.org/hdata/schemas/2009/06/result
+        </extension>
+        <extension contentType="application/xml" extensionId="4">http://projecthdata.org/hdata/schemas/2009/06/allergy
+        </extension>
+        <extension contentType="image/png" extensionId="5">http://www.w3.org/TR/PNG</extension>
+    </extensions>
+    <sections>
+        <section name="Allergies" extensionId="4" path="allergies"/>
+        <section name="Medications" extensionId="1" path="medications"/>
+        <section name="Patient Information" extensionId="2" path="patientinformation">
+            <section name="Patient Photo" extensionId="5" path="photos"/>
+        </section>
+        <section name="Vital Signs" extensionId="3" path="vitalsigns">
+            <section name="Blood Pressure" extensionId="3" path="bloodpressure"/>
+            <section name="Body Height" extensionId="3" path="bodyheight"/>
+            <section name="Body Weight" extensionId="3" path="bodyweight"/>
+        </section>
+    </sections>
+</root>
