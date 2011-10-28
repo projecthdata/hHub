@@ -12,6 +12,7 @@
 
     <modules>
         <module>hHub-commons</module>
+        <module>hHub-android-client</module>
     </modules>
 
     <repositories>
@@ -113,6 +114,7 @@
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-test</artifactId>
                 <version>${spring-social-version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>

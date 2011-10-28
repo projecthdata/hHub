@@ -2,7 +2,6 @@ package org.projecthdata.social.api.impl;
 
 import org.projecthdata.social.api.HData;
 import org.projecthdata.social.api.RootOperations;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.SimpleXmlHttpMessageConverter;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 

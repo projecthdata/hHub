@@ -39,7 +39,7 @@ public class HDataTemplateTest {
         responseHeaders.setContentType(MediaType.APPLICATION_XML);
 
         mockServer.expect(requestTo("http://hstore.com/1234/root.xml")).andExpect(method(GET))
-                .andRespond(withResponse(new ClassPathResource("root.xml", getClass()), responseHeaders));
+                .andRespond(withResponse(new ClassPathResource("../../resources/root.xml", getClass()), responseHeaders));
 
         Root root = hDataTemplate.getRootOperations().getRoot();
         assertEquals(5, root.getExtensions().size());

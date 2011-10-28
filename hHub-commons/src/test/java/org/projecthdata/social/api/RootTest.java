@@ -17,7 +17,7 @@ public class RootTest {
 	@Before
 	public void setUp() throws Exception {
 		serializer = new Persister();
-        source = new ClassPathResource("root.xml", getClass()).getFile();
+        source = new ClassPathResource("../resources/root.xml", getClass()).getFile();
 		assertTrue(source.exists());
 		root = serializer.read(Root.class, source);
 		assertNotNull(root);
