@@ -16,7 +16,7 @@ import org.springframework.social.connect.UserProfile;
  */
 public class HDataAdapter implements ApiAdapter<HData> {
     public boolean test(HData hData) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void setConnectionValues(HData hData, ConnectionValues connectionValues) {
@@ -24,7 +24,7 @@ public class HDataAdapter implements ApiAdapter<HData> {
     }
 
     public UserProfile fetchUserProfile(HData hData) {
-        return null;
+        return UserProfile.EMPTY;
     }
 
     public void updateStatus(HData hData, String s) {

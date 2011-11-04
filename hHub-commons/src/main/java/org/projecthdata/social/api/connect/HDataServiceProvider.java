@@ -10,9 +10,12 @@ import java.net.URI;
 import java.util.StringTokenizer;
 
 public class HDataServiceProvider extends AbstractOAuth2ServiceProvider<HData> {
-    private URI mEhrUrl = null;
+    private URI ehrUrl = null;
     public static final String authorizeUrlPath = "/auth/dialog";
     public static final String accessTokenUrlPath = "/auth/token";
+    //TODO: remove hard coded URLs
+//    private static final String accessTokenUrl = "http://zoidberg.mitre.org:8080/java-hdata-demo-web/auth/token";
+//    private static final String authorizationUrl = "http://zoidberg.mitre.org:8080/java-hdata-demo-web/auth/dialog";
 
     /**
      * @param clientId
@@ -20,12 +23,16 @@ public class HDataServiceProvider extends AbstractOAuth2ServiceProvider<HData> {
      * @param ehrUrl       - the URL to an electronic health record
      */
     public HDataServiceProvider(String clientId, String clientSecret, String ehrUrl) {
-        super(new OAuth2Template(clientId, clientSecret, getAuthorizeUrl(ehrUrl), getAccessTokenUrl(ehrUrl)));
+        //TODO: agree on a way to dynamically determine these URLs from the ehr
+        //super(new OAuth2Template(clientId, clientSecret, getAuthorizeUrl(ehrUrl), getAccessTokenUrl(ehrUrl)));
+
+        super(new HDataOAuth2Template(clientId, clientSecret, HDataServiceProvider.getAuthorizeUrl(ehrUrl), getAccessTokenUrl(ehrUrl)));
+        this. ehrUrl = URI.create(ehrUrl);
     }
 
     @Override
     public HData getApi(String accessToken) {
-        return new HDataTemplate(accessToken, mEhrUrl.toString());
+        return new HDataTemplate(accessToken, ehrUrl.toString());
     }
 
     /**
@@ -62,10 +69,10 @@ public class HDataServiceProvider extends AbstractOAuth2ServiceProvider<HData> {
         if (uri.getPort() >= 0) {
             builder.append(":").append(uri.getPort());
         }
-        if(uri.getPath() != null){
+        if (uri.getPath() != null) {
             StringTokenizer tokenizer = new StringTokenizer(uri.getPath(), "/");
             //if there is more than one path element, then the first one should be the webapp name
-            if(tokenizer.countTokens() >1){
+            if (tokenizer.countTokens() > 1) {
                 builder.append("/").append(tokenizer.nextToken());
             }
         }

@@ -8,8 +8,6 @@
 
 package org.projecthdata.social.api;
 
-
-
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.simpleframework.xml.Element;
@@ -45,12 +43,13 @@ import java.util.Map;
  * 
  * 
  */
-
 @org.simpleframework.xml.Root(strict=false, name="root")
 public class Root {
 
-    @Element
-    protected String id;
+
+    @Element(required = false)
+    protected String id = "-1";
+
     @Element
     protected String version;
 

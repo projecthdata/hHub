@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.projecthdata</groupId>
@@ -12,8 +13,9 @@
         <module>hHub-commons</module>
         <module>hHub-android-client</module>
         <module>hHub-commons-tests</module>
+        <module>hHub-hData-browser</module>
     </modules>
-    
+
     <properties>
         <spring-social-version>1.0.0.RELEASE</spring-social-version>
         <spring-android-version>1.0.0.M4</spring-android-version>
@@ -22,7 +24,7 @@
         <android-version>2.1_r1</android-version>
         <java-version>1.6</java-version>
     </properties>
-    
+
     <repositories>
         <repository>
             <id>central</id>
@@ -238,7 +240,7 @@
                 </exclusions>
                 <scope>compile</scope>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.simpleframework</groupId>
                 <artifactId>simple-xml</artifactId>
@@ -249,6 +251,11 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.j256.ormlite</groupId>
+                <artifactId>ormlite-android</artifactId>
+                <version>4.29</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -271,6 +278,7 @@
             <version>4.1.2</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <profiles>
         <profile>
@@ -387,8 +395,8 @@
                                 <option>-renamesourcefileattribute SourceFile</option>
                                 <option>-keepattributes SourceFile,LineNumberTable</option>
 
-                                 <!---keepattributes-->
-                        <!--SourceFile,LineNumberTable,*Annotation*-->
+                                <!---keepattributes-->
+                                <!--SourceFile,LineNumberTable,*Annotation*-->
 
                                 <!-- Optimization related settings -->
                                 <!--<option>-dontoptimize</option>-->
