@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/org.projecthdata.viewer"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<com.viewpagerindicator.TitlePageIndicator
+		android:id="@+id/ehr_view_titles" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:background="#FFFFFFFF"
+		app:footerColor="#FFDE2439" app:footerLineHeight="2dp"
+		app:textColor="#FFBFADAD"
+		app:selectedColor="#FF000000" app:selectedBold="false" android:padding="10dip"/>
+
+	<android.support.v4.view.ViewPager
+		android:layout_width="match_parent" android:layout_height="match_parent"
+		android:id="@+id/ehr_view_pager" />
+
+	
+</LinearLayout>

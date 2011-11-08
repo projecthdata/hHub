@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="hello">Hello World, RootActivity!</string>
+    <string name="app_name">hData Viewer</string>
+    <string name="PREF_HDATA_RECORD_URL">hdata_record_url</string>
+    <string name="result_form_result_id">Result Id </string>
+	<string name="result_form_date_time">Date and Time</string>
+	<string name="result_form_type_code">Result Type Code</string>
+	<string name="result_form_type_code_system">Result Type Code System </string>
+	<string name="result_form_status_code">Result Status Code</string>
+	<string name="result_form_value">Result Value</string>
+	<string name="result_form_value_unit">Result Value Unit</string>
+	<string name="result_form_narrative">Narrative</string>
+	<string name="result_form_submit">Submit</string>
+</resources>

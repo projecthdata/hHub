@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Theme.hData" parent="android:style/Theme.Light.NoTitleBar">
+		<item name="android:background">@color/content_background</item>
+	</style>
+
+	<style name="Theme.hData.ActionBar">
+		<item name="android:id">@id/title_container</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">@dimen/action_bar_height</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:background">@drawable/action_bar_border</item>
+	</style>
+
+	<style name="Theme.hData.ActionBar.Logo">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">50dp</item>
+		<item name="android:background">@color/action_bar_background</item>
+		<item name="android:paddingLeft">5dp</item>
+		
+		<item name="android:src">@drawable/hdata_logo</item>
+
+	</style>
+
+	<!-- LinearLayout container that provides some padding for its contents -->
+	<style name="Theme.hData.ContentContainer">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:orientation">vertical</item>
+		<item name="android:padding">5dp</item>
+	</style>
+
+	<style name="Theme.hData.Content">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:background">@color/text_content_background</item>
+		<item name="android:typeface">sans</item>
+		<item name="android:padding">10dp</item>
+	</style>
+	
+	<!-- Styles a text view to be a heading -->
+	<style name="Theme.hData.Content.Heading">
+		<item name="android:textSize">25dp</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+	
+	<style name="Theme.hData.Content.Body">
+		<item name="android:textSize">16dp</item>
+	</style>
+
+
+</resources>

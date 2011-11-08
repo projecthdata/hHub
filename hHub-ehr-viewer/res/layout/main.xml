@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" style="@style/Theme.hData">
+	<include layout="@layout/action_bar" />
+
+	<RelativeLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/gallery_container"
+		android:paddingTop="10dp" android:paddingBottom="5dp"
+		android:background="@color/action_bar_background">
+
+		<Gallery android:id="@+id/section_gallery"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:spacing="16dp" android:layout_centerInParent="true"
+			android:background="@color/action_bar_background" />
+
+		<ImageButton android:id="@+id/gallery_back" android:src="@drawable/rewind"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true" android:background="@color/action_bar_background"
+			android:layout_centerInParent="true" android:clickable="true"
+			android:onClick="onGalleryBack" />
+
+		<ImageButton android:id="@+id/gallery_forward"
+			android:src="@drawable/fast_forward" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_alignParentRight="true"
+			android:background="@color/action_bar_background"
+			android:layout_centerInParent="true" android:clickable="true"
+			android:onClick="onGalleryForward" />
+
+	</RelativeLayout>
+
+	<ScrollView android:id="@+id/main_contents_scroll_view"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<ViewFlipper android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:id="@+id/main_view_flipper">
+			
+			<org.projecthdata.viewer.view.PatientView android:id="@+id/main_patient" 
+				 android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/Theme.hData.ContentContainer"/>
+			
+			<org.projecthdata.viewer.view.MedicationView android:id="@+id/main_medication" 
+			android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/Theme.hData.ContentContainer"/>
+			
+			<org.projecthdata.viewer.view.AllergyView android:id="@+id/main_allergy" 
+			android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/Theme.hData.ContentContainer"/>
+			
+			<org.projecthdata.viewer.view.BloodPressureView android:id="@+id/main_bloodpressure" 
+				 android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/Theme.hData.ContentContainer"/>
+			
+			<org.projecthdata.viewer.view.BodyHeightView android:id="@+id/main_bodyheight" 
+				 android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/Theme.hData.ContentContainer"/>
+			
+			<org.projecthdata.viewer.view.BodyWeightView android:id="@+id/main_bodyweight" 
+				 android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/Theme.hData.ContentContainer"/>
+		</ViewFlipper>
+	</ScrollView>
+
+</LinearLayout>

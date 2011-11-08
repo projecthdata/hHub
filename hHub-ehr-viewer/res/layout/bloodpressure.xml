@@ -1,0 +1,8 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- Blood Pressure Section -->
+	<LinearLayout style="@style/Theme.hData.ContentContainer" android:id="@+id/bp_readings_section">
+		<TextView android:text="Blood Pressure" style="@style/Theme.hData.Content.Heading" />
+	</LinearLayout>
+
+</merge>

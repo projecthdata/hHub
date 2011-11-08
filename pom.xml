@@ -30,6 +30,7 @@
         <module>hHub-android-client</module>
         <module>hHub-commons-tests</module>
         <module>hHub-hData-browser</module>
+       <!-- <module>hHub-ehr-viewer</module>   -->
     </modules>
 
     <properties>

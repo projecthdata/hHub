@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="match_parent" android:layout_height="match_parent">
+
+		<!-- Narrative -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_narrative"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:id="@+id/result_form_edit_text_narrative"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+			<requestFocus></requestFocus>
+		</EditText>
+		<!-- Value -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_value" android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp" android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:id="@+id/result_form_edit_text_value"
+			android:inputType="number" android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"></EditText>
+		<!-- Value Unit -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_value_unit"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:id="@+id/result_form_edit_text_value_unit"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"></EditText>
+		<!-- Result ID -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_result_id"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:id="@+id/result_form_edit_text_result_id"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+		<!--Date Time -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_date_time"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:inputType="date"
+			android:id="@+id/result_form_edit_text_date_time"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"></EditText>
+		<!--Result Type Code -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_type_code"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:inputType="number"
+			android:id="@+id/result_form_edit_text_result_type_code"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"></EditText>
+		<!--Result Type Code System -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_type_code_system"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:id="@+id/result_form_edit_text_result_type_code_system"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"></EditText>
+		<!--Result Status Code -->
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/result_form_status_code"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" />
+		<EditText android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:id="@+id/result_form_edit_text_status_code"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+		<Button android:layout_width="wrap_content" android:text="@string/result_form_submit"
+			android:id="@+id/result_form_submit_button" android:layout_height="match_parent"
+			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			android:layout_marginTop="15dp" android:onClick="onSubmit"></Button>
+
+
+	</LinearLayout>
+</ScrollView>
