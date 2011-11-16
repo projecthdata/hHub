@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ <!-- Variation on the Holo Light theme that styles the Action Bar -->
+        <style name="Theme.hHubWeight" parent="Theme.Sherlock.Light">
+        	<item name="android:background">#1100ff</item>
+        </style>
+    
+</resources>

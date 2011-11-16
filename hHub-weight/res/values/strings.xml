@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello hHub-weight!</string>
-    <string name="app_name">hHub-weight</string>
+    <string name="app_name">Weight Tracker</string>
+    <string name="save_button">Save</string>
+    <string name="weight_entry_label">Enter your weight reading:</string>
 </resources>
