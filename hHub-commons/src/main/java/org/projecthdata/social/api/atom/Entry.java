@@ -37,7 +37,7 @@ public class Entry {
 	@Element(required=false)
 	String id = null;
 	
-	//TODO:  should this be mandatory, but is missing from our demo info at: http://ec2-50-16-102-83.compute-1.amazonaws.com:8080/hStore/1234/patientinformation
+	//TODO:  should this be mandatory, but is missing from our demo server
 	@Element(required=false)
 	String updated = null;
 	

@@ -72,7 +72,7 @@ public class HDataWebOauthActivity2 extends Activity {
         webView = new WebView(this);
         setContentView(webView);
         activity = this;
-        this.hDataConnectionFactory = new HDataConnectionFactory(clientId, clientSecret, "http://ec2-50-16-102-83.compute-1.amazonaws.com:8080/hStore/1234");
+        this.hDataConnectionFactory = new HDataConnectionFactory(clientId, clientSecret, "server here");
         webView.setWebChromeClient(new WebChromeClient() {
 
             public void onProgressChanged(WebView view, int progress) {
@@ -167,7 +167,7 @@ public class HDataWebOauthActivity2 extends Activity {
 
                 params.add("code", authCode);
                 RestTemplate template = new RestTemplate();
-                Map<String,Object> response = template.postForObject("http://zoidberg.mitre.org:8080/java-hdata-demo-web/auth/token", params, Map.class);
+                Map<String,Object> response = template.postForObject("server here", params, Map.class);
                 String token = (String) response.get("access_token");
                 AccessGrant accessGrant = new AccessGrant(token);
                 Connection<HData> connection = hDataConnectionFactory.createConnection(accessGrant);

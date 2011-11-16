@@ -25,6 +25,13 @@ import org.projecthdata.R;
 import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.social.api.connect.HDataConnectionFactory;
 
+/**
+ * This Activity does not have any UI.  Based on the state of the application, it will
+ * choose another Activity to start 
+ * 
+ * @author Eric Levine
+ *
+ */
 public class ControllerActivity extends Activity {
     private SharedPreferences prefs =null;
 
@@ -32,12 +39,14 @@ public class ControllerActivity extends Activity {
         super.onCreate(savedInstanceState);
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String ehrUrl = prefs.getString(Constants.PREF_EHR_URL, null);
-
+        
+        //if the URL to the EHR exists, setup the connection and start the browser activity
         if (ehrUrl != null) {
             addConnectionFactory();
             startActivity(new Intent(this, BrowserActivity.class));
             finish();
         } else {
+        	//there is no EHR URL, start the activity to get it from the user
             startActivityForResult(new Intent(this, EhrActivity.class), Constants.RESULT_SAVED);
 
         }
@@ -45,8 +54,10 @@ public class ControllerActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-        if (resultCode == Constants.RESULT_SAVED) {
+        //the user has entered an EHR url
+    	if (resultCode == Constants.RESULT_SAVED) {
             addConnectionFactory();
+            //if necessary, the BrowserActivity will initiate the OAuth handshake
             startActivity(new Intent(this, BrowserActivity.class));
             finish();
         }

@@ -51,6 +51,7 @@ public class HHubApplication extends Application {
     public  ConnectionFactoryRegistry getConnectionFactoryRegistry(){
         return this.connectionFactoryRegistry;
     }
+    
     public HDataConnectionFactory getHDataConnectionFactory(String ehrUrl){
         return (HDataConnectionFactory)connectionFactoryRegistry.getConnectionFactory(ehrUrl);
     }

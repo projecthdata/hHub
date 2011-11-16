@@ -27,6 +27,13 @@ import org.projecthdata.hhub.database.RootEntry;
 
 import java.util.List;
 
+/**
+ * Allows a ListActivity or ListFragment to render a  List of RootEntry objects.  
+ * These contain information about each entry in an hData root document. 
+ * 
+ * @author Eric Levine
+ *
+ */
 public class RootEntryAdapter extends ArrayAdapter<RootEntry> {
     private Context context = null;
 
@@ -38,7 +45,9 @@ public class RootEntryAdapter extends ArrayAdapter<RootEntry> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
+        //TODO: use the ViewHolder pattern here
+    	
+    	if (convertView == null) {
             convertView = LayoutInflater.from(this.context).inflate(R.layout.root_entry_row, null);
         }
         RootEntry entry = getItem(position);

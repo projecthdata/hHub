@@ -35,7 +35,7 @@
             <type>apklib</type>
         </dependency>
         <dependency>
-            <groupId>com.google.android</groupId>
+            <groupId>android</groupId>
             <artifactId>android</artifactId>
         </dependency>
         <dependency>
@@ -55,6 +55,12 @@
                     <groupId>xpp3</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.actionbarsherlock</groupId>
+            <artifactId>library</artifactId>
+            <version>3.4.2</version>
+            <type>apklib</type>
         </dependency>
     </dependencies>
 

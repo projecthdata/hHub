@@ -14,33 +14,22 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.projecthdata" android:versionCode="1" android:versionName="0.0.1-SNAPSHOT">
+        <uses-sdk
+            android:minSdkVersion="7"
+            android:targetSdkVersion="13"/>
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:name=".hhub.HHubApplication" android:theme="@style/Theme.Sherlock.Light">
 
-<manifest android:versionCode="1" android:versionName="1.0"
-    package="org.projecthdata.viewer" xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-sdk android:minSdkVersion="7"/>
-    <application android:icon="@drawable/icon"
-        android:label="@string/app_name" android:theme="@style/Theme.Sherlock.Light">
-        <activity android:label="@string/app_name" android:name=".RootActivity">
- 
-        </activity>
-        <activity android:name=".SettingsActivity"/>
-        <activity android:name=".XmlActivity"/>
-        <activity android:label="EHR Chooser"
-            android:name="org.projecthdata.viewer.ui.HrfChooserActivity" android:theme="@style/Theme.Sherlock.Light">
+        <activity android:name=".browser.EhrActivity" android:label="@string/app_name"/>
+        <activity android:name=".browser.ControllerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:label="EHR Browser"
-            android:name=".ui.EhrActivity" android:theme="@style/Theme.Sherlock.Light"/>
-        <service android:name=".service.DataSyncService"/>
-        <provider
-            android:authorities="org.projecthdata.viewer.provider.vital_signscontentprovider" android:name="org.projecthdata.viewer.provider.VITAL_SIGNSContentProvider"/>
-        <provider
-            android:authorities="org.projecthdata.viewer.provider.allergiescontentprovider" android:name="org.projecthdata.viewer.provider.ALLERGIESContentProvider"/>
-        <activity android:label="New Height Reading" android:name="org.projecthdata.viewer.ui.HeightFormActivity"/>
+        <activity android:name=".browser.BrowserActivity"/>
+        <activity android:name=".hhub.ui.HDataWebOauthActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>
