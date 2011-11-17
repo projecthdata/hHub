@@ -4,4 +4,6 @@
     <string name="app_name">Weight Tracker</string>
     <string name="save_button">Save</string>
     <string name="weight_entry_label">Enter your weight reading:</string>
+  	<string name="clientId">52552477bce63691c516b0ada3da207b</string>
+    <string name="clientSecret">55fe6f7d1539aefd03b457332fc12dac</string>
 </resources>

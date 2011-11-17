@@ -63,7 +63,6 @@
             <type>apklib</type>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

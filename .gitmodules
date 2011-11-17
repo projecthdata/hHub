@@ -1,0 +1,3 @@
+[submodule "greencda"]
+	path = greencda
+	url = git@barrel.mitre.org:hhub/greencda.git

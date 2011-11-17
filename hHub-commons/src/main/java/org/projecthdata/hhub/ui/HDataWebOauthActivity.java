@@ -47,7 +47,9 @@ import java.util.Map;
  * With code from: https://github.com/SpringSource/spring-android-samples/blob/master/spring-android-showcase/client/src/org/springframework/android/showcase/AbstractWebViewActivity.java
  */
 public class HDataWebOauthActivity extends Activity {
-    public static String EXTRA_CALLBACK_INTENT = "callbackIntent";
+	public static final Integer RESULT_CODE_SUCCESS=200;
+	public static final Integer RESULT_CODE_FAILURE=400;
+	
     public static String EXTRA_EHR_URL = "ehrUrl";
 
     protected static final String TAG = HDataWebOauthActivity.class.getSimpleName();
@@ -62,8 +64,10 @@ public class HDataWebOauthActivity extends Activity {
     private ConnectionRepository connectionRepository;
     private HDataConnectionFactory hDataConnectionFactory;
 
-    //the Intent to start when the OAuth handshake has been completed
-    private Intent callbackIntent = null;
+    //an Activity Intent to start when the OAuth handshake has been completed
+    private Intent callbackActivityIntent = null;
+    //a Sevice Intent to start when the OAuth handshake has been completed
+    private Intent callbackServiceIntent = null;
     private String ehrUrl = null;
 
 //
@@ -81,9 +85,6 @@ public class HDataWebOauthActivity extends Activity {
 
         webView = new WebView(this);
         setContentView(webView);
-
-
-        this.callbackIntent = getIntent().getExtras().getParcelable(EXTRA_CALLBACK_INTENT);
         this.ehrUrl = getIntent().getStringExtra(EXTRA_EHR_URL);
 
         activity = this;
@@ -109,7 +110,6 @@ public class HDataWebOauthActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        String url = getAuthorizeUrl();
         // display the authorization page
         getWebView().loadUrl(getAuthorizeUrl());
     }
@@ -156,11 +156,6 @@ public class HDataWebOauthActivity extends Activity {
         }
     }
 
-    private void doCallbackIntent() {
-        startActivity(this.callbackIntent);
-        finish();
-    }
-
     private class MyWebViewClient extends WebViewClient {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -180,8 +175,8 @@ public class HDataWebOauthActivity extends Activity {
             if (uri.getQueryParameter("error") != null) {
                 CharSequence errorReason = uri.getQueryParameter("error_description").replace("+", " ");
                 Toast.makeText(getApplicationContext(), errorReason, Toast.LENGTH_LONG).show();
-                doCallbackIntent();
-
+                setResult(RESULT_CODE_FAILURE);
+                finish();
             } else if (authCode != null) {
                 //Spring is throwing an exception from the server response.  It is likely because
                 //expires_in is coming back as a JSON string instead of a number.  Otherwise, we should be using:
@@ -190,18 +185,9 @@ public class HDataWebOauthActivity extends Activity {
                 MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
                 params.add("client_id", hDataConnectionFactory.getClientId());
                 params.add("grant_type", "authorization_code");
-//                params.add("redirect_uri", redirectUri);
                 params.add("client_secret", hDataConnectionFactory.getClientSecret());
-
-//                params.add("code", authCode);
-
                 AccessGrant accessGrant =  hDataConnectionFactory.getOAuthOperations().exchangeForAccess(authCode, redirectUri, params);
 
-//
-//                RestTemplate template = new RestTemplate();
-//                Map<String, Object> response = template.postForObject(HDataServiceProvider.getAccessTokenUrl(ehrUrl), params, Map.class);
-//                String token = (String) response.get("access_token");
-//                AccessGrant accessGrant = new AccessGrant(token);
                 Connection<HData> connection = hDataConnectionFactory.createConnection(accessGrant);
 
                 try {
@@ -209,9 +195,9 @@ public class HDataWebOauthActivity extends Activity {
                 } catch (DuplicateConnectionException e) {
                     // connection already exists in repository!
                 }
-                doCallbackIntent();
-
-
+                
+                setResult(RESULT_CODE_SUCCESS);
+                finish();
             }
         }
     }
