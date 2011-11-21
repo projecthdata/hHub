@@ -17,18 +17,29 @@
 package org.projecthdata.browser;
 
 import org.projecthdata.R;
+import org.projecthdata.browser.EntriesListFragment.OnRootEntryClickedListener;
+import org.projecthdata.hhub.database.RootEntry;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-public class BrowserActivity extends FragmentActivity {
-    private static final String TAG = "BrowserActivity";
+public class BrowserActivity extends FragmentActivity implements
+		OnRootEntryClickedListener {
+	private static final String TAG = "BrowserActivity";
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.browser);
-    }
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.browser);
+	}
 
+	@Override
+	public void onRootEntryClick(RootEntry entry) {
+		SectionMetadataListFragment sectionFragment = new SectionMetadataListFragment();
+		sectionFragment.setRootEntry(entry);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.fragment_container, sectionFragment, "section")
+				.commit();
+		
+	}
 
- 
 }

@@ -3,7 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+	
+    
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:id="@+id/fragment_container">
+    	    <fragment android:name="org.projecthdata.browser.EntriesListFragment" android:layout_width="match_parent" android:layout_height="match_parent"/>
+    </LinearLayout>
 
-    <fragment android:name="org.projecthdata.browser.EntriesListFragment" android:layout_width="match_parent" android:layout_height="match_parent"/>
 
 </LinearLayout>

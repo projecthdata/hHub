@@ -17,20 +17,18 @@ package org.projecthdata.weight;
 
 import java.sql.SQLException;
 
-import org.projecthdata.weight.R;
-import org.projecthdata.weight.util.Constants;
 import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.hhub.ui.HDataWebOauthActivity;
 import org.projecthdata.social.api.HData;
 import org.projecthdata.social.api.connect.HDataConnectionFactory;
+import org.projecthdata.weight.database.OrmManager;
 import org.projecthdata.weight.database.WeightDatabaseHelper;
 import org.projecthdata.weight.model.WeightReading;
 import org.projecthdata.weight.ui.AddWeightFragment;
 import org.projecthdata.weight.ui.WeightListFragment;
+import org.projecthdata.weight.util.Constants;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
-
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,11 +45,10 @@ import android.widget.EditText;
 public class WeightTrackerActivity extends FragmentActivity implements
 		OrmProvider {
 
-	private WeightDatabaseHelper databaseHelper = null;
 	private AddWeightFragment addWeightFragment = null;
 	private WeightListFragment weightListFragment = null;
 
-	private static String TAG = "hHub-weight";
+	private static final String TAG = "hHub-weight";
 	private static final String ADD_ITEM_TITLE = "Add";
 	private static final String SYNC_ITEM_TITLE = "Sync";
 
@@ -60,7 +57,9 @@ public class WeightTrackerActivity extends FragmentActivity implements
 
 	private static final Integer REQUEST_CODE_OAUTH = 1;
 	private static final Integer REQUEST_CODE_EHR = 2;
-
+	
+	private OrmManager ormManager = null;
+	
 	/**
 	 * Called when the activity is first created.
 	 * 
@@ -86,29 +85,17 @@ public class WeightTrackerActivity extends FragmentActivity implements
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		this.connectionRepository = getApplicationContext()
 				.getConnectionRepository();
-		addConnectionFactory();
-
+		this.ormManager = new OrmManager(this);
 	}
 
 	public WeightDatabaseHelper getDatabaseHelper() {
-		if (databaseHelper == null) {
-			databaseHelper = OpenHelperManager.getHelper(this,
-					WeightDatabaseHelper.class);
-		}
-		return databaseHelper;
+		return ormManager.getDatabaseHelper();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-
-		/*
-		 * Release the helper when done.
-		 */
-		if (databaseHelper != null) {
-			OpenHelperManager.releaseHelper();
-			databaseHelper = null;
-		}
+		ormManager.release();
 	}
 
 	public void onSave(View v) {
@@ -215,6 +202,8 @@ public class WeightTrackerActivity extends FragmentActivity implements
 	 * Launches the Intent to initiate the OAuth handshake
 	 */
 	private void doWebOauthActivity() {
+		//make sure the connection factory is added
+		addConnectionFactory();
 		// the intent to launch
 		Intent intent = new Intent(this, HDataWebOauthActivity.class);
 		intent.putExtra(HDataWebOauthActivity.EXTRA_EHR_URL,

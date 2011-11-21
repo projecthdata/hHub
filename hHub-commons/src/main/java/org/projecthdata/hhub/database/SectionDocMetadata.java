@@ -16,10 +16,13 @@
 
 package org.projecthdata.hhub.database;
 
+import org.projecthdata.social.api.atom.AtomFeed;
+import org.projecthdata.social.api.atom.Entry;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "root_entries")
+@DatabaseTable
 public class SectionDocMetadata {
     @DatabaseField(generatedId = true)
     private int _id;
@@ -33,7 +36,9 @@ public class SectionDocMetadata {
     private String title;
     @DatabaseField
     private String extension;
-
+    @DatabaseField(canBeNull = false, foreign = true)
+    private RootEntry rootEntry=null;
+    
     public int get_id() {
         return _id;
     }
@@ -81,4 +86,20 @@ public class SectionDocMetadata {
     public void setExtension(String extension) {
         this.extension = extension;
     }
+
+	public RootEntry getRootEntry() {
+		return rootEntry;
+	}
+
+	public void setRootEntry(RootEntry rootEntry) {
+		this.rootEntry = rootEntry;
+	}
+	
+	public void copy(Entry atomFeedEntry){
+		this.setLink(atomFeedEntry.getLinkHref());
+		this.setContentType(atomFeedEntry.getLinkType());
+		this.setTitle(atomFeedEntry.getTitle());
+		this.setUpdated(atomFeedEntry.getUpdated());
+	}
+    
 }

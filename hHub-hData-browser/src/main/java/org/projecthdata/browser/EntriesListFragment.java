@@ -22,16 +22,16 @@ import java.util.List;
 import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.hhub.database.HDataDatabaseHelper;
 import org.projecthdata.hhub.database.RootEntry;
+import org.projecthdata.hhub.database.SectionDocMetadata;
 import org.projecthdata.hhub.ui.HDataWebOauthActivity;
 import org.projecthdata.social.api.HData;
 import org.projecthdata.social.api.Root;
+import org.projecthdata.social.api.RootOperations;
 import org.projecthdata.social.api.Section;
-import org.projecthdata.social.api.connect.HDataConnectionFactory;
-import org.springframework.social.ExpiredAuthorizationException;
+import org.projecthdata.social.api.atom.AtomFeed;
+import org.projecthdata.social.api.atom.Entry;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
-
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -40,6 +40,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 public class EntriesListFragment extends ListFragment {
 	public static final String TAG = "EntriesListFragment";
@@ -111,6 +113,14 @@ public class EntriesListFragment extends ListFragment {
 				.findPrimaryConnection(HData.class);
 		return (connection != null);
 	}
+	
+	
+	public void onListItemClick(android.widget.ListView l, android.view.View v, int position, long id) {
+		RootEntry entry  = (RootEntry)getListAdapter().getItem(position);
+		if(getActivity() instanceof OnRootEntryClickedListener){
+			((OnRootEntryClickedListener)getActivity()).onRootEntryClick(entry);
+		}
+	};
 
 	ProgressDialog dialog = null;
 
@@ -132,22 +142,30 @@ public class EntriesListFragment extends ListFragment {
 			
 			Root root = null;
 			try {
-				root = connection.getApi().getRootOperations().getRoot();
+				RootOperations rootOperations = connection.getApi().getRootOperations();
+				root = rootOperations.getRoot();
 				for (Section section : root.getSections()) {
 					RootEntry rootEntry = new RootEntry();
-					rootEntry.setContentType(section.getExtension()
-							.getContentType());
-					rootEntry.setPath(section.getPath());
-					rootEntry.setExtension(section.getExtension().getContent());
+					rootEntry.copy(section);
 					// persist each entry in the database
 					getDatabaseHelper().getRootEntryDao().create(rootEntry);
+					
+					AtomFeed sectionMetadata = rootOperations.getSectionFeed(section);
+					for(Entry entry : sectionMetadata.getEntries()){
+						SectionDocMetadata metadata = new SectionDocMetadata();
+						metadata.copy(entry);
+						getDatabaseHelper().getSectionDocMetadataDao().create(metadata);
+					}
+					
 				}
 			} catch (SQLException sqle) {
 				Log.e(TAG, "Error inserting into database", sqle);
 			}
 			return null;
 		}
-
+		
+		
+		
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
@@ -162,6 +180,10 @@ public class EntriesListFragment extends ListFragment {
 				Log.e(TAG, "Error inserting into database", sqle);
 			}
 		}
+	}
+	
+	public static interface OnRootEntryClickedListener{
+		public void onRootEntryClick(RootEntry entry);
 	}
 
 }

@@ -61,7 +61,6 @@ public class HDataDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     }
 
-
     public Dao<RootEntry, Integer> getRootEntryDao() throws SQLException {
         if (rootEntryDao == null) {
             rootEntryDao = getDao(RootEntry.class);
@@ -69,10 +68,10 @@ public class HDataDatabaseHelper extends OrmLiteSqliteOpenHelper {
         return rootEntryDao;
     }
 
-    public Dao<RootEntry, Integer> getSectionDocMetadataDao() throws SQLException {
+    public Dao<SectionDocMetadata, Integer> getSectionDocMetadataDao() throws SQLException {
         if (sectionDocMetadataDao == null) {
             sectionDocMetadataDao = getDao(SectionDocMetadata.class);
         }
-        return rootEntryDao;
+        return sectionDocMetadataDao;
     }
 }

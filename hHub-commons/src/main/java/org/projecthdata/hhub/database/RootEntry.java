@@ -16,7 +16,11 @@
 
 package org.projecthdata.hhub.database;
 
+import org.projecthdata.social.api.Section;
+
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "root_entries")
@@ -44,7 +48,11 @@ public class RootEntry {
      */
     @DatabaseField
     private String path;
-
+    
+    @ForeignCollectionField(eager=true)
+    private ForeignCollection<SectionDocMetadata> sectionMetadata =null;
+    
+    
     public int get_id() {
         return _id;
     }
@@ -84,4 +92,20 @@ public class RootEntry {
     public void setPath(String path) {
         this.path = path;
     }
+
+	public ForeignCollection<SectionDocMetadata> getSectionMetadata() {
+		return sectionMetadata;
+	}
+
+	public void setSectionMetadata(
+			ForeignCollection<SectionDocMetadata> sectionMetadata) {
+		this.sectionMetadata = sectionMetadata;
+	}
+	
+	public void copy(Section section){
+		this.setContentType(section.getExtension()
+				.getContentType());
+		this.setPath(section.getPath());
+		this.setExtension(section.getExtension().getContent());
+	}
 }

@@ -22,6 +22,7 @@ public class AddWeightFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		databaseHelper = ((OrmProvider)getActivity()).getDatabaseHelper();
+	
 	}
 	
 	@Override

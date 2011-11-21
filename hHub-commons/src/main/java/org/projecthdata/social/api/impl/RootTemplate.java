@@ -16,16 +16,21 @@
 
 package org.projecthdata.social.api.impl;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.projecthdata.social.api.HData;
 import org.projecthdata.social.api.Root;
 import org.projecthdata.social.api.RootOperations;
+import org.projecthdata.social.api.Section;
 import org.projecthdata.social.api.atom.AtomFeed;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URI;
 
 public class RootTemplate extends AbstractHDataOperations implements RootOperations {
     private final RestTemplate restTemplate;
@@ -39,6 +44,17 @@ public class RootTemplate extends AbstractHDataOperations implements RootOperati
         this.restTemplate = restTemplate;
         this.hData = hData;
         this.ehrUri = URI.create(hData.getEhrUrl());
+        
+    	// setup the correct accept headers for processing an atom feed
+		List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+		acceptableMediaTypes.add(MediaType.APPLICATION_ATOM_XML);
+		acceptableMediaTypes.add(MediaType.APPLICATION_XML);
+
+		HttpHeaders requestHeaders = new HttpHeaders();
+		requestHeaders.setAccept(acceptableMediaTypes);
+
+		this.atomFeedRequestEntity = new HttpEntity<Object>(requestHeaders);
+        
 
     }
 
@@ -46,7 +62,18 @@ public class RootTemplate extends AbstractHDataOperations implements RootOperati
         String url = ehrUri.toString() + "/" + ROOT_PATH;
         return restTemplate.getForObject(url, Root.class);
     }
-
+    
+    /**
+     * Retrieves the atom feed for a given section
+     *    
+     * @param section
+     * @return
+     */
+    public AtomFeed getSectionFeed(Section section){
+    	String url = ehrUri.toString() + "/" + section.getPath();
+    	return getForAtomFeed(url);
+    }
+    
 
     /**
      * Adds the correct accept header for a GET request of an atom feed
