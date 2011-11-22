@@ -78,10 +78,11 @@ public class HDataWebOauthActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
+    	super.onCreate(savedInstanceState);
+
+
 
         webView = new WebView(this);
         setContentView(webView);

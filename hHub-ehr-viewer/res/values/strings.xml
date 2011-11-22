@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello hHub-ehr-viewer!</string>
-    <string name="app_name">hHub-ehr-viewer</string>
+    <string name="app_name">EHR Viewer</string>
+    <string name="clientId">52552477bce63691c516b0ada3da207b</string>
+    <string name="clientSecret">55fe6f7d1539aefd03b457332fc12dac</string>
+    <string name="defaultEhrUrl">"http://zoidberg.mitre.org:8080/java-hdata-demo-web/hstore/1234</string>
 </resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2011 The MITRE Corporation
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+	<!-- White -->
+	<color name="action_bar_background">#FFFFFF</color>
+	<color name="text_content_background">#FFFFFF</color>
+	
+	<!-- Light grey -->
+	<!--  <color name="content_background">#F4F4F4</color>-->
+	<color name="content_background">#E5E5E5</color>
+	<!-- Darker grey -->
+	<color name="action_bar_border">#D1D1D1</color>
+	<!-- Darkest grey -->
+	<color name="action_bar_title">#9B9A98 </color>
+	
+	<!-- Red surrounding the "h" in the logo -->	
+	<color name="logo_red">#DB2339</color>
+
+</resources>

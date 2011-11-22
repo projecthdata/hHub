@@ -26,4 +26,6 @@ public class Constants {
      * Result code to indicate the EHR URL has been saved
      */
     public static final int RESULT_SAVED = 1;
+    
+       
 }

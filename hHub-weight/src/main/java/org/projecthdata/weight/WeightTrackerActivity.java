@@ -34,10 +34,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.support.v4.view.Window;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -71,12 +73,13 @@ public class WeightTrackerActivity extends FragmentActivity implements
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate");
+		
 		setContentView(R.layout.main);
 		addWeightFragment = new AddWeightFragment();
 		weightListFragment = new WeightListFragment();
-
+				
 		getSupportFragmentManager()
 				.beginTransaction()
 				.replace(R.id.fragment_container, weightListFragment,
@@ -86,6 +89,7 @@ public class WeightTrackerActivity extends FragmentActivity implements
 		this.connectionRepository = getApplicationContext()
 				.getConnectionRepository();
 		this.ormManager = new OrmManager(this);
+
 	}
 
 	public WeightDatabaseHelper getDatabaseHelper() {

@@ -113,12 +113,13 @@ public class EntriesListFragment extends ListFragment {
 				.findPrimaryConnection(HData.class);
 		return (connection != null);
 	}
-	
-	
-	public void onListItemClick(android.widget.ListView l, android.view.View v, int position, long id) {
-		RootEntry entry  = (RootEntry)getListAdapter().getItem(position);
-		if(getActivity() instanceof OnRootEntryClickedListener){
-			((OnRootEntryClickedListener)getActivity()).onRootEntryClick(entry);
+
+	public void onListItemClick(android.widget.ListView l, android.view.View v,
+			int position, long id) {
+		RootEntry entry = (RootEntry) getListAdapter().getItem(position);
+		if (getActivity() instanceof OnRootEntryClickedListener) {
+			((OnRootEntryClickedListener) getActivity())
+					.onRootEntryClick(entry);
 		}
 	};
 
@@ -133,39 +134,66 @@ public class EntriesListFragment extends ListFragment {
 					"Loading. Please wait...", true);
 		}
 
-		@Override
-		protected Void doInBackground(Void... params) {
-			// use the connection to get the root document
-			Connection<HData> connection = connectionRepository
-					.getPrimaryConnection(HData.class);
-
-			
-			Root root = null;
+		public void processSection(RootOperations rootOperations,
+				Section section) {
 			try {
-				RootOperations rootOperations = connection.getApi().getRootOperations();
-				root = rootOperations.getRoot();
-				for (Section section : root.getSections()) {
-					RootEntry rootEntry = new RootEntry();
-					rootEntry.copy(section);
-					// persist each entry in the database
-					getDatabaseHelper().getRootEntryDao().create(rootEntry);
-					
-					AtomFeed sectionMetadata = rootOperations.getSectionFeed(section);
-					for(Entry entry : sectionMetadata.getEntries()){
-						SectionDocMetadata metadata = new SectionDocMetadata();
-						metadata.copy(entry);
-						getDatabaseHelper().getSectionDocMetadataDao().create(metadata);
+				RootEntry rootEntry = new RootEntry();
+				rootEntry.copy(section);
+				// persist each entry in the database
+				getDatabaseHelper().getRootEntryDao().create(rootEntry);
+
+				AtomFeed sectionMetadata = rootOperations
+						.getSectionFeed(section);
+				for (Entry entry : sectionMetadata.getEntries()) {
+					SectionDocMetadata metadata = new SectionDocMetadata();
+					metadata.copy(entry);
+					metadata.setRootEntry(rootEntry);
+					getDatabaseHelper().getSectionDocMetadataDao().create(
+							metadata);
+				}
+				if (section.getSections() != null) {
+					// recursively process child sections
+					for (Section childSection : section.getSections()) {
+						processSection(rootOperations, childSection);
 					}
-					
 				}
 			} catch (SQLException sqle) {
 				Log.e(TAG, "Error inserting into database", sqle);
 			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			// clear the data
+			try {
+				List<RootEntry> entries = getDatabaseHelper().getRootEntryDao()
+						.queryForAll();
+				for (RootEntry entry : entries) {
+					entry.getSectionMetadata().clear();
+					getDatabaseHelper().getRootEntryDao().delete(entry);
+
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			// use the connection to get the root document
+			Connection<HData> connection = connectionRepository
+					.getPrimaryConnection(HData.class);
+
+			RootOperations rootOperations = connection.getApi()
+					.getRootOperations();
+			Root root = rootOperations.getRoot();
+			for (Section section : root.getSections()) {
+				processSection(rootOperations, section);
+
+			}
+
 			return null;
 		}
-		
-		
-		
+
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
@@ -181,8 +209,8 @@ public class EntriesListFragment extends ListFragment {
 			}
 		}
 	}
-	
-	public static interface OnRootEntryClickedListener{
+
+	public static interface OnRootEntryClickedListener {
 		public void onRootEntryClick(RootEntry entry);
 	}
 
