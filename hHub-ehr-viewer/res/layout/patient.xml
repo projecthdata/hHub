@@ -13,48 +13,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <LinearLayout
-            style="@style/Theme.hData.ContentContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <!-- The name of the medication -->
-
-            <LinearLayout style="@style/Theme.hData.ContentContainer" >
-
-                <TextView
-                    style="@style/Theme.hData.Content.Heading"
-                    android:text="Patient" />
-
-                <TextView
-                    android:id="@+id/patient_name"
-                    style="@style/Theme.hData.Content.Body" />
-            </LinearLayout>
-
-            <!-- The narrative -->
-
-            <LinearLayout style="@style/Theme.hData.ContentContainer" >
-
-                <TextView
-                    style="@style/Theme.hData.Content.Heading"
-                    android:text="Patient ID" />
-
-                <TextView
-                    android:id="@+id/patient_id"
-                    style="@style/Theme.hData.Content.Body" />
-            </LinearLayout>
-
-            <LinearLayout style="@style/Theme.hData.ContentContainer" >
-
-                <ImageView
-                    android:id="@+id/patient_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/image_placeholder" >
-                </ImageView>
-            </LinearLayout>
-        </LinearLayout>
+        <include layout="@layout/patient_info"  android:layout_width="fill_parent" android:layout_height="fill_parent"/>
     </ScrollView>
 
 </ViewSwitcher>

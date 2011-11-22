@@ -35,8 +35,11 @@ import android.content.SharedPreferences.Editor;
 
 public class PatientSyncService extends AbstractSyncService {
 	public static final String TAG = PatientSyncService.class.getSimpleName();
-	private static final String PATIENT_SCHEMA = "http://projecthdata.org/hdata/schemas/2009/06/patient_information";
-
+	private static final String EXTENSION_PATIENT = "http://projecthdata.org/hdata/schemas/2009/06/patient_information";
+	private static final String EXTENSION_PNG = "http://www.w3.org/TR/PNG";
+	
+	private Editor editor = null;
+	
 	public PatientSyncService() {
 		super(TAG);
 	}
@@ -47,7 +50,7 @@ public class PatientSyncService extends AbstractSyncService {
 	}
 
 	private void doSyncPatientInfo() {
-		Editor editor = prefs.edit();
+		this.editor = prefs.edit();
 		editor.putString(Constants.PREF_PATIENT_INFO_SYNC_STATE,
 				SyncState.WORKING.toString()).commit();
 
@@ -61,7 +64,7 @@ public class PatientSyncService extends AbstractSyncService {
 			RootEntry entry = rootDao.queryForFirst(rootDao
 					.queryBuilder()
 					.where()
-					.eq(RootEntry.COLUMN_NAME_EXTENSION, PATIENT_SCHEMA)
+					.eq(RootEntry.COLUMN_NAME_EXTENSION, EXTENSION_PATIENT)
 					.and()
 					.eq(RootEntry.COLUMN_NAME_CONTENT_TYPE,
 							MediaType.APPLICATION_XML).prepare());
@@ -81,20 +84,36 @@ public class PatientSyncService extends AbstractSyncService {
 
 			Patient patientInfo = restTemplate.getForObject(
 					metadata.getLink(), Patient.class);
+			
 			save(patientInfo);
+			
+			//get the url for their photo
+			 entry = rootDao.queryForFirst(rootDao
+						.queryBuilder()
+						.where()
+						.eq(RootEntry.COLUMN_NAME_EXTENSION, EXTENSION_PNG)
+						.and()
+						.eq(RootEntry.COLUMN_NAME_CONTENT_TYPE,
+								MediaType.IMAGE_PNG).prepare());
+			 if(entry != null){
+				 metadata = sectionDao.queryForFirst(sectionDao.queryBuilder().where()
+						 .eq("rootEntry_id", entry.get_id()).and()
+						 .eq("contentType", MediaType.IMAGE_PNG).prepare());
 
-
+			 	this.editor.putString(Constants.PREF_PATIENT_PHOTO_URL, metadata.getLink());
+			 }
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		editor.putString(Constants.PREF_PATIENT_INFO_SYNC_STATE,
-				SyncState.READY.toString()).commit();
+		this.editor.putString(Constants.PREF_PATIENT_INFO_SYNC_STATE,
+				SyncState.READY.toString());
+		//committing all of the changes 
+		this.editor.commit();
 	}
 
 	private void save(Patient patientInfo) {
-		Editor editor = prefs.edit();
 		editor.putString(Constants.PREF_PATIENT_NAME_GIVEN,
 				patientInfo.getGivenName());
 		editor.putString(Constants.PREF_PATIENT_NAME_LASTNAME,
@@ -102,7 +121,6 @@ public class PatientSyncService extends AbstractSyncService {
 		editor.putString(Constants.PREF_PATIENT_ID, patientInfo.getId());
 		editor.putString(Constants.PREF_PATIENT_NAME_SUFFIX,
 				patientInfo.getSuffix());
-		editor.commit();
 	}
 
 }

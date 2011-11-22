@@ -125,7 +125,7 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		 menu.add(MENU_TITLE_REFRESH)
-         .setIcon(android.R.drawable.ic_menu_rotate)
+         .setIcon(android.R.drawable.ic_popup_sync)
          .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		 
 		 return true;
