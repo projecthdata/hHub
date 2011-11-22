@@ -23,7 +23,8 @@
         <activity android:name=".activities.EhrUrlFormActivity" />
         <activity android:name=".activities.EhrActivity" />
         <activity android:name="org.projecthdata.hhub.ui.HDataWebOauthActivity" />
-        <service android:name="org.projecthdata.ehr.viewer.service.HDataSyncService"/>
+        <service android:name=".service.HDataSyncService"/>
+        <service android:name=".service.PatientSyncService"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

@@ -13,15 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.projecthdata.ehr.viewer.xml;
 
-package org.projecthdata.social.api;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Path;
 
-import org.projecthdata.social.api.atom.AtomFeed;
-import org.springframework.web.client.RestTemplate;
+public class EffectiveFrequency {
+	
+	@Attribute(name="value") @Path("period")
+	String period;
+	
+	@Attribute @Path("period")
+	String unit;
 
+	public String getPeriod() {
+		return period;
+	}
 
-public interface RootOperations {
-    public Root getRoot();
-    public AtomFeed getSectionFeed(Section section);
-    public RestTemplate getRestTemplate();
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	
+	
 }

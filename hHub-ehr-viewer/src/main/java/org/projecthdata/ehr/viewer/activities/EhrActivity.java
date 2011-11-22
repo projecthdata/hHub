@@ -3,12 +3,14 @@ package org.projecthdata.ehr.viewer.activities;
 
 import org.projecthdata.ehr.viewer.R;
 import org.projecthdata.ehr.viewer.fragments.PatientFragment;
+import org.projecthdata.ehr.viewer.service.HDataSyncService;
 import org.projecthdata.ehr.viewer.util.Constants;
-import org.projecthdata.ehr.viewer.util.Constants.RootSyncState;
+import org.projecthdata.ehr.viewer.util.Constants.SyncState;
 
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.Window;
 
@@ -25,6 +29,7 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 	private SharedPreferences prefs = null;
 	private ViewPager mPager;
 	private static final int NUM_ITEMS = 1;
+	private static final String MENU_TITLE_REFRESH = "Refresh";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +111,32 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 	}
 	
 	public void updateProgressBar(){
-		String rootSyncState = prefs.getString(Constants.PREF_ROOT_SYNC_STATE, RootSyncState.UNSTARTED.toString());
-		if(rootSyncState.equals(RootSyncState.READY.toString())){
+		String rootSyncState = prefs.getString(Constants.PREF_ROOT_SYNC_STATE, SyncState.UNSTARTED.toString());
+		if(rootSyncState.equals(SyncState.READY.toString())){
 			setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 		else{
 			setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
+	}
+	
+
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		 menu.add(MENU_TITLE_REFRESH)
+         .setIcon(android.R.drawable.ic_menu_rotate)
+         .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		 
+		 return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		if(MENU_TITLE_REFRESH.equals(item.getTitle())){
+			startService(new Intent(this, HDataSyncService.class));
+		}
+		return true;
 	}
 	
 }

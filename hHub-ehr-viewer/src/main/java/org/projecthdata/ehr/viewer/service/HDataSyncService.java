@@ -19,10 +19,7 @@ package org.projecthdata.ehr.viewer.service;
 import java.sql.SQLException;
 
 import org.projecthdata.ehr.viewer.util.Constants;
-import org.projecthdata.ehr.viewer.util.Constants.RootSyncState;
-import org.projecthdata.hhub.HHubApplication;
-import org.projecthdata.hhub.database.HDataDatabaseHelper;
-import org.projecthdata.hhub.database.OrmManager;
+import org.projecthdata.ehr.viewer.util.Constants.SyncState;
 import org.projecthdata.hhub.database.RootEntry;
 import org.projecthdata.hhub.database.SectionDocMetadata;
 import org.projecthdata.social.api.HData;
@@ -32,55 +29,38 @@ import org.projecthdata.social.api.Section;
 import org.projecthdata.social.api.atom.AtomFeed;
 import org.projecthdata.social.api.atom.Entry;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionRepository;
+
+import android.content.Intent;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 
-import android.app.IntentService;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
-
-public class HDataSyncService extends IntentService {
+public class HDataSyncService extends AbstractSyncService {
 	public static final String TAG = HDataSyncService.class.getSimpleName();
 	public static final String EXTRA_SYNC_ROOT = "syncRoot";
 
-	private OrmManager<HDataDatabaseHelper> hDataOrmManager = null;
-	private ConnectionRepository connectionRepository = null;
-	private String ehrUrl = null;
-	private SharedPreferences prefs = null;
-	
 	public HDataSyncService() {
-		super(HDataSyncService.class.getSimpleName());
-	}
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		hDataOrmManager = new OrmManager<HDataDatabaseHelper>(this,
-				HDataDatabaseHelper.class);
-
-		// initialize the utilities for communicating with the hData server
-		this.connectionRepository = ((HHubApplication) getApplicationContext())
-				.getConnectionRepository();
-		this.ehrUrl = PreferenceManager.getDefaultSharedPreferences(this)
-				.getString(Constants.PREF_EHR_URL, "");
-		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
+		super(TAG);
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		if (intent.hasExtra(EXTRA_SYNC_ROOT)) {
-			onSyncRoot();
-		}
+
+		onSyncRoot();
+		// sync the document data
+		startService(new Intent(this, PatientSyncService.class));
 
 	}
 
+	/**
+	 * Clears out all root and section data, retrieves the current root document
+	 * and atom feeds] , and adds their information to the database.
+	 */
 	private void onSyncRoot() {
-		prefs.edit().putString(Constants.PREF_ROOT_SYNC_STATE, RootSyncState.WORKING.toString()).commit();
-		//TODO: check for connection, launch OAuth activity, resume sync
+		prefs.edit()
+				.putString(Constants.PREF_ROOT_SYNC_STATE,
+						SyncState.WORKING.toString()).commit();
+		// TODO: check for connection, launch OAuth activity, resume sync
 		try {
 			Dao<RootEntry, Integer> rootDao = hDataOrmManager
 					.getDatabaseHelper().getRootEntryDao();
@@ -104,25 +84,34 @@ public class HDataSyncService extends IntentService {
 			e.printStackTrace();
 			Log.e(TAG, Log.getStackTraceString(e));
 		}
-		prefs.edit().putString(Constants.PREF_ROOT_SYNC_STATE, RootSyncState.READY.toString()).commit();
+		prefs.edit()
+				.putString(Constants.PREF_ROOT_SYNC_STATE,
+						SyncState.READY.toString()).commit();
 	}
 
-	public void processSection(RootOperations rootOperations,
-			Section section) {
+	/**
+	 * For the given Section, add it to the root entries table. It will also
+	 * retrieve the atom feed for the section and add each Entry into the
+	 * metadata table. This function will recursively call itself to process
+	 * child sections
+	 * 
+	 * @param rootOperations
+	 * @param section
+	 */
+	private void processSection(RootOperations rootOperations, Section section) {
 		try {
-			
+
 			Dao<RootEntry, Integer> rootDao = hDataOrmManager
 					.getDatabaseHelper().getRootEntryDao();
 			Dao<SectionDocMetadata, Integer> sectionDao = hDataOrmManager
 					.getDatabaseHelper().getSectionDocMetadataDao();
-			
+
 			RootEntry rootEntry = new RootEntry();
 			rootEntry.copy(section);
 			// persist each entry in the database
 			rootDao.create(rootEntry);
 
-			AtomFeed sectionMetadata = rootOperations
-					.getSectionFeed(section);
+			AtomFeed sectionMetadata = rootOperations.getSectionFeed(section);
 			for (Entry entry : sectionMetadata.getEntries()) {
 				SectionDocMetadata metadata = new SectionDocMetadata();
 				metadata.copy(entry);
@@ -138,14 +127,6 @@ public class HDataSyncService extends IntentService {
 		} catch (SQLException sqle) {
 			Log.e(TAG, "Error inserting into database", sqle);
 			sqle.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		if (hDataOrmManager != null) {
-			hDataOrmManager.release();
 		}
 	}
 

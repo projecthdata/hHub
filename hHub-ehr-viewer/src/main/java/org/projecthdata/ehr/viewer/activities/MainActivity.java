@@ -4,7 +4,7 @@ import org.projecthdata.ehr.viewer.R;
 import org.projecthdata.ehr.viewer.fragments.PatientFragment;
 import org.projecthdata.ehr.viewer.service.HDataSyncService;
 import org.projecthdata.ehr.viewer.util.Constants;
-import org.projecthdata.ehr.viewer.util.Constants.RootSyncState;
+import org.projecthdata.ehr.viewer.util.Constants.SyncState;
 import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.hhub.ui.HDataWebOauthActivity;
 import org.projecthdata.social.api.HData;
@@ -75,8 +75,8 @@ public class MainActivity extends Activity {
 			// kick off a sync if one hasn't already happened
 			String rootSyncState = prefs.getString(
 					Constants.PREF_ROOT_SYNC_STATE,
-					RootSyncState.UNSTARTED.toString());
-			if (rootSyncState.equals(RootSyncState.UNSTARTED.toString())) {
+					SyncState.UNSTARTED.toString());
+			if (rootSyncState.equals(SyncState.UNSTARTED.toString())) {
 				Intent syncIntent = new Intent(this, HDataSyncService.class);
 				syncIntent.putExtra(HDataSyncService.EXTRA_SYNC_ROOT, true);
 				startService(syncIntent);

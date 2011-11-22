@@ -92,4 +92,9 @@ public class RootTemplate extends AbstractHDataOperations implements RootOperati
         }
         return feed;
     }
+
+	@Override
+	public RestTemplate getRestTemplate() {
+		return restTemplate;
+	}
 }

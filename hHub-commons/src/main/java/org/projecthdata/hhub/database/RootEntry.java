@@ -25,7 +25,12 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "root_entries")
 public class RootEntry {
-    @DatabaseField(generatedId = true)
+    //by default, column names match the variable names
+	public static final String COLUMN_NAME_EXTENSION = "extension";
+    public static final String COLUMN_NAME_CONTENT_TYPE = "contentType";
+    		
+	
+	@DatabaseField(generatedId = true)
     private int _id;
 
     /**
