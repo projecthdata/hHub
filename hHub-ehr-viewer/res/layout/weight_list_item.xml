@@ -23,10 +23,10 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/weight_list_item_value"
-        android:layout_width="match_parent"
+        android:id="@+id/weight_list_item_value_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
