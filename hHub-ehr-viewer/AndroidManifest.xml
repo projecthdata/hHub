@@ -25,6 +25,7 @@
         <activity android:name="org.projecthdata.hhub.ui.HDataWebOauthActivity" />
         <service android:name=".service.HDataSyncService"/>
         <service android:name=".service.PatientSyncService"/>
+        <service android:name=".service.WeightSyncService"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

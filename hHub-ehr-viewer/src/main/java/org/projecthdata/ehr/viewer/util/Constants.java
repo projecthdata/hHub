@@ -30,8 +30,10 @@ public class Constants {
      */
     public static final int RESULT_SAVED = 1;
     
+    //sync related information
     public static final String PREF_ROOT_SYNC_STATE = "rootSyncState";
     public static final String PREF_PATIENT_INFO_SYNC_STATE = "patientInfoSyncState";
+    public static final String PREF_WEIGHT_SYNC_STATE = "weightSyncState";
     public static enum SyncState {UNSTARTED,READY,WORKING};
     
     
@@ -43,6 +45,9 @@ public class Constants {
   	public static final String PREF_PATIENT_PHOTO_URL = "patient_photo";
   	public static final String PREF_PATIENT_DATA_STATUS = "patient_data_status";
     
-    
-    
+  	//extensions
+  	public static final String EXTENSION_RESULT = "http://projecthdata.org/hdata/schemas/2009/06/result";
+  	public static final String EXTENSION_PATIENT = "http://projecthdata.org/hdata/schemas/2009/06/patient_information";
+  	public static final String EXTENSION_PNG = "http://www.w3.org/TR/PNG";
+	
 }

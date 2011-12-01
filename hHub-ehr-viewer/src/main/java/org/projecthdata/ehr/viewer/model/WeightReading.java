@@ -17,6 +17,8 @@ package org.projecthdata.ehr.viewer.model;
 
 import java.util.Date;
 
+import org.projecthdata.ehr.viewer.xml.Result;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -78,5 +80,14 @@ public class WeightReading {
 	}
 	public void set_id(int _id) {
 		this._id = _id;
+	}
+	
+	public void copy(Result result){
+		setNarrative(result.getNarrative());
+		setDateTime(result.getDateTimeObj().toDate());
+		setResultStatusCode(result.getResultStatusCode());
+		setResultValue(result.getResultValue());
+		setResultValueUnit(result.getResultValueUnit());
+		setResultId(result.getResultId());
 	}
 }

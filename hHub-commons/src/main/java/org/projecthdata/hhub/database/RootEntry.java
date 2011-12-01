@@ -28,7 +28,7 @@ public class RootEntry {
     //by default, column names match the variable names
 	public static final String COLUMN_NAME_EXTENSION = "extension";
     public static final String COLUMN_NAME_CONTENT_TYPE = "contentType";
-    		
+    public static final String COLUMN_PATH = "path";		
 	
 	@DatabaseField(generatedId = true)
     private int _id;

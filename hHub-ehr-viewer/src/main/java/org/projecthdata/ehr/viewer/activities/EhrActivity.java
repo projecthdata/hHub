@@ -18,6 +18,7 @@ package org.projecthdata.ehr.viewer.activities;
 
 import org.projecthdata.ehr.viewer.R;
 import org.projecthdata.ehr.viewer.fragments.PatientFragment;
+import org.projecthdata.ehr.viewer.fragments.WeightFragment;
 import org.projecthdata.ehr.viewer.service.HDataSyncService;
 import org.projecthdata.ehr.viewer.util.Constants;
 import org.projecthdata.ehr.viewer.util.Constants.SyncState;
@@ -43,7 +44,7 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 	private MyAdapter mAdapter;
 	private SharedPreferences prefs = null;
 	private ViewPager mPager;
-	private static final int NUM_ITEMS = 1;
+	private static final int NUM_ITEMS = 2;
 	private static final String MENU_TITLE_REFRESH = "Refresh";
 	
 	@Override
@@ -88,6 +89,8 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 			switch (position) {
 			case 0:
 				return new PatientFragment();
+			case 1:
+				return new WeightFragment();
 			default:
 				break;
 			}
@@ -100,7 +103,7 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 			case 0:
 				return "Patient Info";
 			case 1:
-				return "Allergies";
+				return "Weight";
 			case 2:
 				return "Height";
 			default:

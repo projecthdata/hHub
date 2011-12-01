@@ -49,6 +49,7 @@ public class HDataSyncService extends AbstractSyncService {
 		onSyncRoot();
 		// sync the document data
 		startService(new Intent(this, PatientSyncService.class));
+		startService(new Intent(this, WeightSyncService.class));
 
 	}
 

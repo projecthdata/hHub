@@ -35,9 +35,7 @@ import android.content.SharedPreferences.Editor;
 
 public class PatientSyncService extends AbstractSyncService {
 	public static final String TAG = PatientSyncService.class.getSimpleName();
-	private static final String EXTENSION_PATIENT = "http://projecthdata.org/hdata/schemas/2009/06/patient_information";
-	private static final String EXTENSION_PNG = "http://www.w3.org/TR/PNG";
-	
+
 	private Editor editor = null;
 	
 	public PatientSyncService() {
@@ -64,7 +62,7 @@ public class PatientSyncService extends AbstractSyncService {
 			RootEntry entry = rootDao.queryForFirst(rootDao
 					.queryBuilder()
 					.where()
-					.eq(RootEntry.COLUMN_NAME_EXTENSION, EXTENSION_PATIENT)
+					.eq(RootEntry.COLUMN_NAME_EXTENSION, Constants.EXTENSION_PATIENT)
 					.and()
 					.eq(RootEntry.COLUMN_NAME_CONTENT_TYPE,
 							MediaType.APPLICATION_XML).prepare());
@@ -75,12 +73,12 @@ public class PatientSyncService extends AbstractSyncService {
 					.eq("rootEntry_id", entry.get_id()).and()
 					.eq("contentType", MediaType.APPLICATION_XML).prepare());
 			
-			//grab that document and parse out the patient info
+			// grab that document and parse out the patient info
 			Connection<HData> connection = connectionRepository
 					.getPrimaryConnection(HData.class);
 
-			RestTemplate restTemplate = connection.getApi()
-					.getRootOperations().getRestTemplate();
+			RestTemplate restTemplate = connection.getApi().getRootOperations()
+					.getRestTemplate();
 
 			Patient patientInfo = restTemplate.getForObject(
 					metadata.getLink(), Patient.class);
@@ -91,7 +89,7 @@ public class PatientSyncService extends AbstractSyncService {
 			 entry = rootDao.queryForFirst(rootDao
 						.queryBuilder()
 						.where()
-						.eq(RootEntry.COLUMN_NAME_EXTENSION, EXTENSION_PNG)
+						.eq(RootEntry.COLUMN_NAME_EXTENSION, Constants.EXTENSION_PNG)
 						.and()
 						.eq(RootEntry.COLUMN_NAME_CONTENT_TYPE,
 								MediaType.IMAGE_PNG).prepare());

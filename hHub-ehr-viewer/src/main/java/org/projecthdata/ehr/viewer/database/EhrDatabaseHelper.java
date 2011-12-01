@@ -61,7 +61,7 @@ public class EhrDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	}
 	
-	Dao<WeightReading, Integer> getWeightReadingDao() throws SQLException {
+	public Dao<WeightReading, Integer> getWeightReadingDao() throws SQLException {
 		if(weightReadingDao == null){
 			this.weightReadingDao = getDao(WeightReading.class);
 		}

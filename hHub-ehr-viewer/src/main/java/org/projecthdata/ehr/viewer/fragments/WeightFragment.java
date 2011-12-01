@@ -15,28 +15,106 @@
  */
 package org.projecthdata.ehr.viewer.fragments;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.projecthdata.ehr.viewer.R;
 import org.projecthdata.ehr.viewer.database.EhrDatabaseHelper;
+import org.projecthdata.ehr.viewer.model.WeightReading;
+import org.projecthdata.ehr.viewer.util.Constants;
+import org.projecthdata.ehr.viewer.util.Constants.SyncState;
+import org.projecthdata.ehr.viewer.widget.WeightReadingListAdapter;
+import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.hhub.database.OrmManager;
+import org.springframework.social.connect.ConnectionRepository;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ViewSwitcher;
 
-public class WeightFragment extends ListFragment implements OnSharedPreferenceChangeListener {
-	private OrmManager<EhrDatabaseHelper> ehrOrmManager = null;
+public class WeightFragment extends ListFragment implements
+		OnSharedPreferenceChangeListener {
+	private SharedPreferences prefs = null;
+	private ViewSwitcher switcher = null;
+	protected ConnectionRepository connectionRepository = null;
+	private WeightReadingListAdapter adapter = null;
+	private EhrDatabaseHelper ehrDatabaseHelper = null;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.ehrOrmManager = new OrmManager<EhrDatabaseHelper>(getActivity(), EhrDatabaseHelper.class);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.weight, null);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		this.ehrDatabaseHelper = new EhrDatabaseHelper(getActivity());
+		this.prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		prefs.registerOnSharedPreferenceChangeListener(this);
+		this.switcher = (ViewSwitcher) (getActivity()
+				.findViewById(R.id.weight_view_switcher));
+		
+
+		// initialize the utilities for communicating with the hData server
+		this.connectionRepository = ((HHubApplication) getActivity()
+				.getApplicationContext()).getConnectionRepository();
+		
+		adapter = new WeightReadingListAdapter(getActivity(), new ArrayList<WeightReading>());
+		setListAdapter(adapter);
 	}
 	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		// TODO Auto-generated method stub
-		
+		if (key.equals(Constants.PREF_WEIGHT_SYNC_STATE)) {
+			updateListData();
+			updateSwitcher();
+		}
+
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		updateListData();
+		updateSwitcher();
+	}
+
+	private void updateListData(){
+		try {
+
+			super.onStart();
+			List<WeightReading> readings = this.ehrDatabaseHelper.getWeightReadingDao().queryForAll();
+			adapter = new WeightReadingListAdapter(getActivity(), readings);
+			setListAdapter(adapter);
+			
+		} catch (SQLException e) {
+			Log.e(getClass().getSimpleName(), Log.getStackTraceString(e));
+		}
+	}
+	
+	private void updateSwitcher() {
+		boolean doneSyncing = SyncState.READY.toString().equals(
+				prefs.getString(Constants.PREF_WEIGHT_SYNC_STATE, ""));
+		// if we are done syncing, show child 1
+		int index = (doneSyncing) ? 1 : 0;
+		switcher.setDisplayedChild(index);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		this.ehrDatabaseHelper.close();
 	}
 
 }
