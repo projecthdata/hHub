@@ -108,6 +108,16 @@ public class WeightTrackerActivity extends FragmentActivity implements
 				.getConnectionRepository();
 		this.ormManager = new OrmManager(this);
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
+		
+		//if the data string is present, then it contains the EHR URL.  
+		//This is probably coming from a scanned QR code.  Start the activity to
+		//save the EHR URL and kickoff the OAuth handshake
+		if(getIntent().getDataString() != null){
+			Intent ehrIntent = new Intent(this, EhrActivity.class);
+			ehrIntent.putExtra(EhrActivity.EXTRA_EHR_URL, getIntent().getDataString());
+			startActivityForResult(ehrIntent, REQUEST_CODE_EHR);
+		}
+		
 
 	}
 
@@ -244,6 +254,7 @@ public class WeightTrackerActivity extends FragmentActivity implements
 		} catch (IllegalArgumentException e) {
 			// expected if there is already a ConnectionFactory for this url
 		}
+		
 	}
 
 	@Override

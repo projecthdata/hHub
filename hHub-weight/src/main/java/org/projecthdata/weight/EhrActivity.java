@@ -35,13 +35,19 @@ import android.support.v4.app.FragmentActivity;
  *
  */
 public class EhrActivity extends FragmentActivity {
-
+	public static final String EXTRA_EHR_URL = "ehrUrl";
+	
     private SharedPreferences prefs = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ehr_url);
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        String extraEhrUrl = getIntent().getExtras().getString(EXTRA_EHR_URL);
+        if (extraEhrUrl != null){
+        	((EditText)findViewById(R.id.hrf_url_edit_text)).setText(extraEhrUrl);
+        }
     }
 
     public void onSaveButton(View v) {

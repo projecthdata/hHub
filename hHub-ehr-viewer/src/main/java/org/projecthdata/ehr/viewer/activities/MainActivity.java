@@ -70,12 +70,26 @@ public class MainActivity extends Activity {
 		this.connectionRepository = ((HHubApplication) getApplicationContext())
 				.getConnectionRepository();
 
+		
+		if(getIntent().getDataString() != null){
+			//if a connection exists, remove it
+			if(isConnected()){
+				Connection<HData> connection = connectionRepository
+						.findPrimaryConnection(HData.class);
+				connectionRepository.removeConnection(connection.getKey());
+			}
+			
+			Intent ehrIntent = new Intent(this, EhrUrlFormActivity.class);
+			ehrIntent.putExtra(EhrUrlFormActivity.EXTRA_EHR_URL, getIntent().getDataString());
+			startActivityForResult(ehrIntent,Constants.RESULT_SAVED);
+			
+		}
 		// if the URL to the EHR exists, setup the connection and start the
 		// browser activity
-		if (this.ehrUrl != null) {
+		else if (this.ehrUrl != null) {
 			ehrUrlExists();
 		} else {
-			// there is no EHR URL, start the activity to get it from the user
+			// there is no EHR URL, start the activity to get it from the user			
 			startActivityForResult(new Intent(this, EhrUrlFormActivity.class),
 					Constants.RESULT_SAVED);
 		}

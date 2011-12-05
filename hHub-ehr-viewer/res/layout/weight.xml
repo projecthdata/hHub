@@ -1,5 +1,4 @@
 <!--
-
     Copyright 2011 The MITRE Corporation
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +12,6 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-
 -->
 <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/weight_view_switcher"
@@ -27,10 +24,6 @@
         android:layout_height="fill_parent"
         layout="@layout/loading" />
 
-    <ListView
-        android:id="@id/android:list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
+    <include layout="@layout/weight_list"  android:layout_width="fill_parent" android:layout_height="fill_parent"/>
 
 </ViewSwitcher>

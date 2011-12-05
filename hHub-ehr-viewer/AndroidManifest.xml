@@ -13,19 +13,30 @@
         android:label="@string/app_name"
         android:name="org.projecthdata.hhub.HHubApplication"
         android:theme="@style/Theme.Sherlock.Light" >
-        <activity android:name=".activities.MainActivity" android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="ec2-50-16-102-83.compute-1.amazonaws.com"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
         <activity android:name=".activities.EhrUrlFormActivity" />
         <activity android:name=".activities.EhrActivity" />
         <activity android:name="org.projecthdata.hhub.ui.HDataWebOauthActivity" />
-        <service android:name=".service.HDataSyncService"/>
-        <service android:name=".service.PatientSyncService"/>
-        <service android:name=".service.WeightSyncService"/>
+
+        <service android:name=".service.HDataSyncService" />
+        <service android:name=".service.PatientSyncService" />
+        <service android:name=".service.WeightSyncService" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
