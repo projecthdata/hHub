@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -105,7 +106,14 @@ public class HDataWebOauthActivity extends Activity {
             }
         });
         webView.setWebViewClient(new MyWebViewClient());
-
+        
+        //clear out any previously used credentials
+        webView.clearCache(true);
+        webView.clearFormData();
+        webView.clearHistory();
+        webView.getSettings().setSavePassword(false);
+        webView.getSettings().setSaveFormData(false);
+        CookieManager.getInstance().removeAllCookie();
     }
 
     @Override
