@@ -17,14 +17,18 @@ package org.projecthdata.ehr.viewer.model;
 
 import java.util.Date;
 
-import org.projecthdata.ehr.viewer.xml.Result;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.projecthdata.hdata.model.Result;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable
 public class WeightReading {
-    @DatabaseField(generatedId = true)
+    public static final String COLUMN_DATE_TIME="dateTime";
+    
+	@DatabaseField(generatedId = true)
     private int _id;
     @DatabaseField
     private String resultStatusCode;
@@ -38,6 +42,9 @@ public class WeightReading {
     private String resultId;
     @DatabaseField
     private Date dateTime;
+    
+    private  DateTimeFormatter formatter = DateTimeFormat.forPattern("MMMM dd, yyyy");
+    
     
 	public String getResultStatusCode() {
 		return resultStatusCode;
@@ -80,6 +87,10 @@ public class WeightReading {
 	}
 	public void set_id(int _id) {
 		this._id = _id;
+	}
+	
+	public String getFormattedDateTime(){
+		return formatter.print(this.dateTime.getTime());
 	}
 	
 	public void copy(Result result){

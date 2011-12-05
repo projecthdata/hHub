@@ -23,6 +23,8 @@ import org.projecthdata.weight.OrmProvider;
 import org.projecthdata.weight.database.WeightDatabaseHelper;
 import org.projecthdata.weight.model.WeightReading;
 
+import com.j256.ormlite.dao.Dao;
+
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -41,7 +43,9 @@ public class WeightListFragment extends ListFragment{
 	public void onResume() {
 		super.onResume();
 		try {
-			List<WeightReading> readings = databaseHelper.getWeightDao().queryForAll();
+			
+			Dao<WeightReading, Integer> dao = databaseHelper.getWeightDao();
+			List<WeightReading> readings = dao.query(dao.queryBuilder().orderBy(WeightReading.COLUMN_DATE_TIME, false).prepare());
 			setListAdapter(new WeightReadingAdapter(getActivity(), readings));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

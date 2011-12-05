@@ -17,22 +17,41 @@
 package org.projecthdata.weight.service;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.social.api.HData;
 import org.projecthdata.weight.database.OrmManager;
 import org.projecthdata.weight.model.WeightReading;
+import org.projecthdata.weight.util.Constants;
+import org.projecthdata.weight.util.Constants.SyncState;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.web.client.RestTemplate;
 
 import com.j256.ormlite.dao.Dao;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+
+import org.projecthdata.hdata.model.Result;
 
 public class SyncService extends IntentService {
 	private OrmManager ormManager = null;
 	private ConnectionRepository connectionRepository = null;
+	private DateTimeFormatter dateFormatter = ISODateTimeFormat.dateTime();
+	private static final String NARRATIVE = "Body weight";
+	private static final String CODE = "27113001";
+	private static final String CODE_SYSTEM = "2.16.840.1.113883.6.96";
+	private static final String RESULT_STATUS_CODE = "completed";
+	private static final String UNITS = "kg";
+	private SharedPreferences prefs = null;
 	
 	public SyncService() {
 		super("SyncService");
@@ -44,6 +63,7 @@ public class SyncService extends IntentService {
 		this.ormManager = new OrmManager(this);
 		// initialize the utilities for communicating with the hData server
 		this.connectionRepository = ((HHubApplication)getApplicationContext()).getConnectionRepository();
+		this.prefs =  PreferenceManager.getDefaultSharedPreferences(this);
 	}
 	
 	@Override
@@ -51,16 +71,40 @@ public class SyncService extends IntentService {
 		Connection<HData> connection = connectionRepository
 				.getPrimaryConnection(HData.class);
 		
+		this.prefs.edit().putString(Constants.PREF_SYNC_STATE, SyncState.WORKING.toString()).commit();
 		//get all readings that are not synced
 		 try {
 			Dao<WeightReading, Integer> dao = ormManager.getDatabaseHelper().getWeightDao();
 			//TODO: query the database instead of iterating over the whole table
+			
+			String url = this.prefs.getString(Constants.PREF_EHR_URL, "");
+			Uri uri =Uri.parse(url);
+			uri = uri.buildUpon().appendPath("vitalsigns").appendPath("bodyweight").build();
+			RestTemplate template = connection.getApi().getRootOperations().getRestTemplate();
+			
 			for(WeightReading reading : dao){
 				
 				if(!reading.isSynched()){
-					//TODO: upload it
-//					connection.getApi().getRootOperations().
+					Result result = new Result();
+					//date and time
+					result.setResultDateTime(new DateTime(reading.getDateTime().getTime()).toString(dateFormatter));
+					//narrative
+					result.setNarrative(NARRATIVE);
+					//result id
+					result.setResultId(UUID.randomUUID().toString());
+					//result type code
+					result.getResultType().setCode(CODE);
+					//result type code system
+					result.getResultType().setCodeSystem(CODE_SYSTEM);
+					//status code
+					result.setResultStatusCode(RESULT_STATUS_CODE);
+					//value
+					result.setResultValue(reading.getResultValue().toString());
+					//value unit
+					result.setResultValueUnit(UNITS);
 					
+					template.postForObject(uri.toString(), result, String.class);
+										
 					reading.setSynched(true);
 					dao.update(reading);
 				}
@@ -69,6 +113,8 @@ public class SyncService extends IntentService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		 
+		 this.prefs.edit().putString(Constants.PREF_SYNC_STATE, SyncState.READY.toString()).commit();
 	}
 	
 	@Override

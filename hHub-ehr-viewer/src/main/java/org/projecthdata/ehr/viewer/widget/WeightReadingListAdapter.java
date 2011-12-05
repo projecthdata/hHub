@@ -44,7 +44,9 @@ public class WeightReadingListAdapter extends ArrayAdapter<WeightReading>{
 			convertView = inflater.inflate(R.layout.weight_list_item, null);
 		}
 		WeightReading reading = (WeightReading)getItem(position);
-		((TextView)convertView.findViewById(R.id.weight_list_item_value_text)).setText(reading.getResultValue());
+		String weightValue = reading.getResultValue() + " " + reading.getResultValueUnit();
+		((TextView)convertView.findViewById(R.id.weight_list_item_value_text)).setText(weightValue);
+		((TextView)convertView.findViewById(R.id.weight_list_item_date_text)).setText(reading.getFormattedDateTime());
 		return convertView;
 	}
 }

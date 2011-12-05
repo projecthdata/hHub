@@ -19,7 +19,7 @@
 	<packaging>apk</packaging>
 	<name>hHub Weight App</name>
 
-    <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>org.projecthdata</groupId>
 			<artifactId>hHub-commons</artifactId>
@@ -36,9 +36,13 @@
 			<version>3.4.2</version>
 			<type>apklib</type>
 		</dependency>
+		<dependency>
+			<groupId>org.achartengine</groupId>
+			<artifactId>achartengine</artifactId>
+		</dependency>
 	</dependencies>
 
-    <build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>

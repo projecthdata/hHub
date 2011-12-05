@@ -153,10 +153,10 @@
 					<version>1.2</version>
 				</plugin>
 				<plugin>
-          			<groupId>com.mycila.maven-license-plugin</groupId>
-          			<artifactId>maven-license-plugin</artifactId>
-          			<version>1.9.0</version>
-        		</plugin>
+					<groupId>com.mycila.maven-license-plugin</groupId>
+					<artifactId>maven-license-plugin</artifactId>
+					<version>1.9.0</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -189,18 +189,18 @@
 					<header>header.txt</header>
 					<useDefaultExcludes>true</useDefaultExcludes>
 					<excludes>
-                    	<exclude>**/*.xsd</exclude>
-                    	<exclude>.idea/**</exclude>
-                    	<exclude>*.txt</exclude>
-                    	<exclude>**/AndroidManifest.xml</exclude>
-                    	<exclude>**/R.java</exclude>
-                    	<exclude>**/project.properties</exclude>
-                    	<exclude>README.md</exclude>
-                    	<exclude>**/.git*</exclude>
-                    	<exclude>**/test/resources/*</exclude>
-                    	<exclude>**/default.properties</exclude>
-                    	<exclude>**/bin/*</exclude>
-                </excludes>
+						<exclude>**/*.xsd</exclude>
+						<exclude>.idea/**</exclude>
+						<exclude>*.txt</exclude>
+						<exclude>**/AndroidManifest.xml</exclude>
+						<exclude>**/R.java</exclude>
+						<exclude>**/project.properties</exclude>
+						<exclude>README.md</exclude>
+						<exclude>**/.git*</exclude>
+						<exclude>**/test/resources/*</exclude>
+						<exclude>**/default.properties</exclude>
+						<exclude>**/bin/*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 
@@ -309,6 +309,12 @@
 				<groupId>com.j256.ormlite</groupId>
 				<artifactId>ormlite-android</artifactId>
 				<version>4.30</version>
+			</dependency>
+			<!-- Note: achartengine is not in a public repo, it must be copied into the local maven cache -->
+			<dependency>
+				<groupId>org.achartengine</groupId>
+				<artifactId>achartengine</artifactId>
+				<version>0.7.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.actionbarsherlock</groupId>

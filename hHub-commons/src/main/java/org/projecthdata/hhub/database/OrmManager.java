@@ -21,6 +21,20 @@ import android.content.Context;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
+/**
+ * <p>
+ * Handles the lifecycle of an OrmLiteSqliteOpenHelper within a Context. 
+ * </p>
+ * <p>
+ * <b>Note:</b> This can only be used to manage one type of OrmLiteSqliteOpenHelper within an
+ * application.  This is due to a limitation from the underlying OpenHelperManager class.  
+ * If you have multiple OrmLiteSqliteOpenHelpers, then they will have to be created and released individually within
+ * a Context.
+ * </p>
+ * @author Eric Levine
+ *
+ * @param <T>
+ */
 public class OrmManager<T extends OrmLiteSqliteOpenHelper> {
 	private T databaseHelper = null;
 	private Context context = null;

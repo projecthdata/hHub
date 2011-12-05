@@ -13,20 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.projecthdata.hdata.model;
 
-package org.projecthdata.weight.util;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Path;
 
-public class Constants {
-    /**
-     * The URL for the EHR
-     */
-    public static final String PREF_EHR_URL = "ehrURL";
+public class EffectiveFrequency {
+	
+	@Attribute(name="value") @Path("period")
+	String period;
+	
+	@Attribute @Path("period")
+	String unit;
 
-    /**
-     * Result code to indicate the EHR URL has been saved
-     */
-    public static final int RESULT_SAVED = 1;
-    
-    public static final String PREF_SYNC_STATE = "weightSyncState";
-    public static enum SyncState {UNSTARTED,READY,WORKING};
+	public String getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	
+	
 }

@@ -7,7 +7,7 @@ import org.projecthdata.ehr.viewer.database.EhrDatabaseHelper;
 import org.projecthdata.ehr.viewer.model.WeightReading;
 import org.projecthdata.ehr.viewer.util.Constants;
 import org.projecthdata.ehr.viewer.util.Constants.SyncState;
-import org.projecthdata.ehr.viewer.xml.Result;
+import org.projecthdata.hdata.model.Result;
 import org.projecthdata.hhub.database.OrmManager;
 import org.projecthdata.hhub.database.RootEntry;
 import org.projecthdata.hhub.database.SectionDocMetadata;
@@ -78,6 +78,9 @@ public class WeightSyncService extends AbstractSyncService {
 					.getRestTemplate();
 			
 			Dao<WeightReading, Integer> weightDao = ehrDatabaseHelper.getWeightReadingDao();
+			//delete all entries in the table
+			weightDao.delete(weightDao.deleteBuilder().prepare());
+			//add new entries to the table
 			for (SectionDocMetadata metadata : metadatas) {
 				Result result = restTemplate.getForObject(metadata.getLink(),
 						Result.class);

@@ -29,6 +29,8 @@ import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.hhub.database.OrmManager;
 import org.springframework.social.connect.ConnectionRepository;
 
+import com.j256.ormlite.dao.Dao;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -94,7 +96,10 @@ public class WeightFragment extends ListFragment implements
 		try {
 
 			super.onStart();
-			List<WeightReading> readings = this.ehrDatabaseHelper.getWeightReadingDao().queryForAll();
+			Dao<WeightReading, Integer> weightDao = this.ehrDatabaseHelper.getWeightReadingDao();
+			
+			List<WeightReading> readings = weightDao.query(weightDao.queryBuilder().orderBy(WeightReading.COLUMN_DATE_TIME, false).prepare());
+						
 			adapter = new WeightReadingListAdapter(getActivity(), readings);
 			setListAdapter(adapter);
 			

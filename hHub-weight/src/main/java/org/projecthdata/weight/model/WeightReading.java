@@ -16,12 +16,21 @@
  */
 package org.projecthdata.weight.model;
 
+import java.util.Date;
+
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "weight_reading")
 public class WeightReading {
-    @DatabaseField(generatedId = true)
+    public static final  String COLUMN_DATE_TIME = "dateTime";
+
+	private  DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy h:mma");
+	
+	@DatabaseField(generatedId = true)
     private int _id;
     
     @DatabaseField
@@ -30,6 +39,21 @@ public class WeightReading {
     @DatabaseField
     private boolean synched = false;
     
+    @DatabaseField
+    private Date dateTime = null;
+    
+    public WeightReading(){
+    	this.dateTime = new Date(System.currentTimeMillis());
+    }
+    
+	public Date getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(Date dateTime) {
+		this.dateTime = dateTime;
+	}
+
 	public int get_id() {
 		return _id;
 	}
@@ -54,6 +78,9 @@ public class WeightReading {
 		this.synched = synched;
 	}
     
+	public String getFormattedDateTime(){
+		return formatter.print(this.dateTime.getTime());
+	}
     
     
     

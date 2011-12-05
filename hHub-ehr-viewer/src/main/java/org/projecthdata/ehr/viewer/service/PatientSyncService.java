@@ -16,11 +16,10 @@
 package org.projecthdata.ehr.viewer.service;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import org.projecthdata.ehr.viewer.util.Constants;
 import org.projecthdata.ehr.viewer.util.Constants.SyncState;
-import org.projecthdata.ehr.viewer.xml.Patient;
+import org.projecthdata.hdata.model.Patient;
 import org.projecthdata.hhub.database.RootEntry;
 import org.projecthdata.hhub.database.SectionDocMetadata;
 import org.projecthdata.social.api.HData;

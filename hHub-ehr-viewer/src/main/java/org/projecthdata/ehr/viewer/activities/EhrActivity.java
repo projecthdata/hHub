@@ -23,6 +23,8 @@ import org.projecthdata.ehr.viewer.service.HDataSyncService;
 import org.projecthdata.ehr.viewer.util.Constants;
 import org.projecthdata.ehr.viewer.util.Constants.SyncState;
 
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
@@ -62,8 +64,8 @@ public class EhrActivity extends FragmentActivity implements OnSharedPreferenceC
 		mPager.setAdapter(mAdapter);
 
 		// Bind the title indicator to the adapter
-		TitlePageIndicator titleIndicator = (TitlePageIndicator) findViewById(R.id.ehr_view_titles);
-		titleIndicator.setViewPager(mPager);
+		PageIndicator indicator = (TitlePageIndicator) findViewById(R.id.ehr_view_titles);
+		indicator.setViewPager(mPager);
 		
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(this);
