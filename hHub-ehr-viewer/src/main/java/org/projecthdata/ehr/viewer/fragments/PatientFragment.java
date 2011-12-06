@@ -144,7 +144,7 @@ public class PatientFragment extends Fragment implements
 					this.drawable = Drawable.createFromStream(
 							new ByteArrayInputStream(raw), "src name");
 				}
-			} catch (RestClientException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return null;

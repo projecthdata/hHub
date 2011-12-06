@@ -22,6 +22,7 @@ import java.util.List;
 import org.projecthdata.ehr.viewer.R;
 import org.projecthdata.ehr.viewer.database.EhrDatabaseHelper;
 import org.projecthdata.ehr.viewer.model.WeightReading;
+import org.projecthdata.ehr.viewer.service.WeightSyncService;
 import org.projecthdata.ehr.viewer.util.Constants;
 import org.projecthdata.ehr.viewer.util.Constants.SyncState;
 import org.projecthdata.ehr.viewer.widget.WeightReadingListAdapter;
@@ -31,6 +32,7 @@ import org.springframework.social.connect.ConnectionRepository;
 
 import com.j256.ormlite.dao.Dao;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -94,8 +96,6 @@ public class WeightFragment extends ListFragment implements
 
 	private void updateListData(){
 		try {
-
-			super.onStart();
 			Dao<WeightReading, Integer> weightDao = this.ehrDatabaseHelper.getWeightReadingDao();
 			
 			List<WeightReading> readings = weightDao.query(weightDao.queryBuilder().orderBy(WeightReading.COLUMN_DATE_TIME, false).prepare());
@@ -121,5 +121,5 @@ public class WeightFragment extends ListFragment implements
 		super.onDestroy();
 		this.ehrDatabaseHelper.close();
 	}
-
+	
 }

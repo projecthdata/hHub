@@ -23,6 +23,7 @@ import org.projecthdata.ehr.viewer.fragments.PatientFragment;
 import org.projecthdata.ehr.viewer.fragments.WeightFragment;
 import org.projecthdata.ehr.viewer.model.WeightReading;
 import org.projecthdata.ehr.viewer.service.HDataSyncService;
+import org.projecthdata.ehr.viewer.service.WeightSyncService;
 import org.projecthdata.ehr.viewer.util.Constants;
 import org.projecthdata.ehr.viewer.util.Constants.SyncState;
 import org.projecthdata.hhub.HHubApplication;
@@ -50,6 +51,7 @@ import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.Window;
+import android.view.View;
 
 public class EhrActivity extends FragmentActivity implements
 		OnSharedPreferenceChangeListener {
@@ -66,9 +68,9 @@ public class EhrActivity extends FragmentActivity implements
 
 	private WeightFragment weightFragment = null;
 	private PatientFragment patientFragment = null;
-	
+
 	private ConnectionRepository connectionRepository = null;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// This has to be called before setContentView and you must use the
@@ -93,7 +95,7 @@ public class EhrActivity extends FragmentActivity implements
 		prefs.registerOnSharedPreferenceChangeListener(this);
 
 		this.ehrDatabaseHelper = new EhrDatabaseHelper(this);
-		
+
 		// initialize the utilities for communicating with the hData server
 		this.connectionRepository = ((HHubApplication) getApplicationContext())
 				.getConnectionRepository();
@@ -186,12 +188,12 @@ public class EhrActivity extends FragmentActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (MENU_TITLE_REFRESH.equals(item.getTitle())) {
 			startService(new Intent(this, HDataSyncService.class));
-		} 
+		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
+	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().equals(CLEAR_DATA_TITLE)) {
 			onClearDataMenuItem();
 		} else if (item.getTitle().equals(LOGOUT_TITLE)) {
@@ -199,45 +201,46 @@ public class EhrActivity extends FragmentActivity implements
 		}
 		return true;
 	}
-	
-	
-	private void onLogoutMenuItem(){
-		
-		String providerId = this.getApplicationContext().getConnectionFactoryRegistry().getConnectionFactory(HData.class).getProviderId();
+
+	private void onLogoutMenuItem() {
+
+		String providerId = this.getApplicationContext()
+				.getConnectionFactoryRegistry()
+				.getConnectionFactory(HData.class).getProviderId();
 		connectionRepository.removeConnections(providerId);
-		
-		//clear out all data too
+
+		// clear out all data too
 		clearAllData();
-		//close this Activity (which should close the whole app)
+		// close this Activity (which should close the whole app)
 		finish();
 	}
-	
-	
-	
+
 	private void onClearDataMenuItem() {
 		clearAllData();
 		weightFragment.onStart();
 		patientFragment.onStart();
 	}
-	
-	private void clearAllData(){
+
+	private void clearAllData() {
 		try {
 			Dao<WeightReading, Integer> dao = ehrDatabaseHelper
 					.getWeightReadingDao();
 			dao.delete(dao.deleteBuilder().prepare());
-			
+
 			Editor editor = prefs.edit();
 			editor.remove(Constants.PREF_PATIENT_NAME_LASTNAME)
 					.remove(Constants.PREF_PATIENT_NAME_GIVEN)
 					.remove(Constants.PREF_PATIENT_NAME_SUFFIX)
-					.remove(Constants.PREF_PATIENT_ID)
-					.remove(Constants.PREF_EHR_URL)
-					.commit();
+					.remove(Constants.PREF_PATIENT_ID).commit();
+			editor.remove(Constants.PREF_EHR_URL).commit();
+			editor.remove(Constants.PREF_WEIGHT_SYNC_STATE).commit();
+			editor.remove(Constants.PREF_ROOT_SYNC_STATE).commit();
+			editor.remove(Constants.PREF_PATIENT_INFO_SYNC_STATE).commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public WeightFragment getWeightFragment() {
 		return weightFragment;
 	}
@@ -253,9 +256,13 @@ public class EhrActivity extends FragmentActivity implements
 	public void setPatientFragment(PatientFragment patientFragment) {
 		this.patientFragment = patientFragment;
 	}
-	
+
 	@Override
 	public HHubApplication getApplicationContext() {
 		return (HHubApplication) super.getApplicationContext();
+	}
+
+	public void onRefreshWeights(View v) {
+		startService(new Intent(this, WeightSyncService.class));
 	}
 }

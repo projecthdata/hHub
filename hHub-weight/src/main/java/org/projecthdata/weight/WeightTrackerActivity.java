@@ -104,6 +104,7 @@ public class WeightTrackerActivity extends FragmentActivity implements
 		getSupportFragmentManager().beginTransaction()
 				.add(chartFragment, "chart").commit();
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
 		this.connectionRepository = getApplicationContext()
 				.getConnectionRepository();
 		this.ormManager = new OrmManager(this);

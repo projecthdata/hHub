@@ -28,8 +28,13 @@ import org.projecthdata.weight.database.OrmManager;
 import org.projecthdata.weight.model.WeightReading;
 import org.projecthdata.weight.util.Constants;
 import org.projecthdata.weight.util.Constants.SyncState;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.j256.ormlite.dao.Dao;
@@ -39,6 +44,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import org.projecthdata.hdata.model.Result;
 
@@ -82,6 +88,9 @@ public class SyncService extends IntentService {
 			uri = uri.buildUpon().appendPath("vitalsigns").appendPath("bodyweight").build();
 			RestTemplate template = connection.getApi().getRootOperations().getRestTemplate();
 			
+			HttpHeaders requestHeaders = new HttpHeaders();
+			requestHeaders.setContentType(MediaType.APPLICATION_XML);
+			
 			for(WeightReading reading : dao){
 				
 				if(!reading.isSynched()){
@@ -103,7 +112,15 @@ public class SyncService extends IntentService {
 					//value unit
 					result.setResultValueUnit(UNITS);
 					
-					template.postForObject(uri.toString(), result, String.class);
+					try {
+
+
+						HttpEntity<Result> requestEntity = new HttpEntity<Result>(result, requestHeaders);
+						template.exchange(uri.toString(), HttpMethod.POST, requestEntity, String.class);
+					} catch (RestClientException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 										
 					reading.setSynched(true);
 					dao.update(reading);
@@ -115,6 +132,7 @@ public class SyncService extends IntentService {
 		}
 		 
 		 this.prefs.edit().putString(Constants.PREF_SYNC_STATE, SyncState.READY.toString()).commit();
+		 
 	}
 	
 	@Override

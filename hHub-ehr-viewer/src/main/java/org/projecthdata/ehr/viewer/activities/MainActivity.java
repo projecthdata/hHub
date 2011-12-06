@@ -168,8 +168,14 @@ public class MainActivity extends Activity {
 	}
 
 	private boolean isConnected() {
-		Connection<HData> connection = connectionRepository
-				.findPrimaryConnection(HData.class);
+		Connection<HData> connection = null;
+		
+		try {
+			connectionRepository
+					.findPrimaryConnection(HData.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return (connection != null);
 	}
 

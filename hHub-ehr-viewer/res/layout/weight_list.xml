@@ -9,11 +9,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" >
     </ListView>
-	<!--  
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/weight_refresh_button_lablel" />-->
+        android:text="@string/weight_refresh_button_lablel" 
+        android:onClick="onRefreshWeights"
+        />
 
 </RelativeLayout>
