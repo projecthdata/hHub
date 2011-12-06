@@ -23,43 +23,44 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
 /**
  * <p>
- * Handles the lifecycle of an OrmLiteSqliteOpenHelper within a Context. 
+ * Handles the lifecycle of an OrmLiteSqliteOpenHelper within a Context.
  * </p>
  * <p>
- * <b>Note:</b> This can only be used to manage one type of OrmLiteSqliteOpenHelper within an
- * application.  This is due to a limitation from the underlying OpenHelperManager class.  
- * If you have multiple OrmLiteSqliteOpenHelpers, then they will have to be created and released individually within
- * a Context.
+ * <b>Note:</b> This can only be used to manage one type of
+ * OrmLiteSqliteOpenHelper within an application. This is due to a limitation
+ * from the underlying OpenHelperManager class. If you have multiple
+ * OrmLiteSqliteOpenHelpers, then they will have to be created and released
+ * individually within a Context.
  * </p>
+ * 
  * @author Eric Levine
- *
+ * 
  * @param <T>
  */
 public class OrmManager<T extends OrmLiteSqliteOpenHelper> {
 	private T databaseHelper = null;
 	private Context context = null;
 	private Class<T> openHelperType;
-	
-	public OrmManager(Context context, Class<T> openHelperType){
+
+	public OrmManager(Context context, Class<T> openHelperType) {
 		this.context = context;
 		this.openHelperType = openHelperType;
-		
-		
+
 	}
-	
+
 	public T getDatabaseHelper() {
 		if (databaseHelper == null) {
-			databaseHelper = OpenHelperManager.getHelper(context, openHelperType);
+			databaseHelper = OpenHelperManager.getHelper(context,
+					openHelperType);
 		}
 		return databaseHelper;
 	}
-	
+
 	/**
-	 * This should be called when the owning Context 
-	 * is being destroyed
+	 * This should be called when the owning Context is being destroyed
 	 * 
 	 */
-	public void release(){
+	public void release() {
 		/*
 		 * Release the helper when done.
 		 */
@@ -68,5 +69,5 @@ public class OrmManager<T extends OrmLiteSqliteOpenHelper> {
 			databaseHelper = null;
 		}
 	}
-	
+
 }

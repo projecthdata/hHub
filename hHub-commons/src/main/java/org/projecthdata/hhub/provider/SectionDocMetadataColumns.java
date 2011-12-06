@@ -16,8 +16,8 @@
 
 package org.projecthdata.hhub.provider;
 
-public class SectionDocMetadataColumns extends  AbstractColumns{
-	
+public class SectionDocMetadataColumns extends AbstractColumns {
+
 	public static final String LINK = "link";
 	public static final String UPDATED = "updated";
 	public static final String CONTENT_TYPE = "content_type";
@@ -25,13 +25,13 @@ public class SectionDocMetadataColumns extends  AbstractColumns{
 	public static final String HRF_ID = "hrf_id";
 	public static final String ROOT_ENTRIES_ID = "root_entries_id";
 	public static final String EXTENSION = "extension";
-	
-	private static final String[] ALL_COLUMNS_PROJECTION = {_ID, LINK, UPDATED, CONTENT_TYPE, 
-		TITLE, HRF_ID, ROOT_ENTRIES_ID, EXTENSION};
-	
-	private static final SectionDocMetadataColumns instance= new SectionDocMetadataColumns(); 
-	
-	private SectionDocMetadataColumns(){
+
+	private static final String[] ALL_COLUMNS_PROJECTION = { _ID, LINK,
+			UPDATED, CONTENT_TYPE, TITLE, HRF_ID, ROOT_ENTRIES_ID, EXTENSION };
+
+	private static final SectionDocMetadataColumns instance = new SectionDocMetadataColumns();
+
+	private SectionDocMetadataColumns() {
 		super();
 		columnNamesToTypes.put(_ID, "INTEGER PRIMARY KEY AUTOINCREMENT");
 		columnNamesToTypes.put(LINK, "TEXT");
@@ -42,8 +42,8 @@ public class SectionDocMetadataColumns extends  AbstractColumns{
 		columnNamesToTypes.put(ROOT_ENTRIES_ID, "INTEGER");
 		columnNamesToTypes.put(EXTENSION, "TEXT");
 	}
-	
-	public static SectionDocMetadataColumns getInstance(){
+
+	public static SectionDocMetadataColumns getInstance() {
 		return instance;
 	}
 

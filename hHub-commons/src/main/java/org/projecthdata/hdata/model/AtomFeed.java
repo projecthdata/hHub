@@ -24,16 +24,17 @@ import org.simpleframework.xml.Root;
 
 /**
  * The list of documents in a section will be provided as an atom feed
+ * 
  * @author elevine
- *
+ * 
  */
-@Root(name="feed", strict=false)
+@Root(name = "feed", strict = false)
 public class AtomFeed {
-	
+
 	@Element
 	String title = null;
-	
-	@ElementList(inline=true, name="entry")
+
+	@ElementList(inline = true, name = "entry")
 	List<Entry> entries = new ArrayList<Entry>();
 
 	public String getTitle() {
@@ -51,5 +52,5 @@ public class AtomFeed {
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
 	}
-	
+
 }

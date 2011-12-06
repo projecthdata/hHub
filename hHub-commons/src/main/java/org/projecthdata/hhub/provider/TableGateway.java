@@ -34,16 +34,17 @@ public abstract class TableGateway {
 		this.uri = uri;
 		this.projection = projection;
 	}
-	
+
 	/**
 	 * Retrieves all entries
+	 * 
 	 * @param context
 	 * @return
 	 */
 	public Cursor getAll(Context context) {
 		return queryUri(null, null);
 	}
-	
+
 	/**
 	 * Generates an "anded" selection statement from a List of column names
 	 * 
@@ -63,33 +64,36 @@ public abstract class TableGateway {
 		return builder.toString();
 
 	}
-	
+
 	protected Cursor queryUri(String selection, String[] selectionArgs) {
 		return queryUri(this.uri, selection, selectionArgs);
 	}
-	
-	protected Cursor queryUri(Uri uri, String selection, String[] selectionArgs){
+
+	protected Cursor queryUri(Uri uri, String selection, String[] selectionArgs) {
 		return context.getContentResolver().query(uri, this.projection,
 				selection, selectionArgs, null);
 	}
-	
-	protected Uri insert(ContentValues values){
+
+	protected Uri insert(ContentValues values) {
 		return context.getContentResolver().insert(this.uri, values);
 	}
-	
-	protected void update(ContentValues values, String where, String[] selectionArgs){
-		context.getContentResolver().update(this.uri, values, where, selectionArgs);
+
+	protected void update(ContentValues values, String where,
+			String[] selectionArgs) {
+		context.getContentResolver().update(this.uri, values, where,
+				selectionArgs);
 	}
-	
-	protected int delete(String where, String[] selectionArgs){
-		return context.getContentResolver().delete(this.uri, where, selectionArgs);
+
+	protected int delete(String where, String[] selectionArgs) {
+		return context.getContentResolver().delete(this.uri, where,
+				selectionArgs);
 	}
-	
-	protected int deleteAll(){
+
+	protected int deleteAll() {
 		return context.getContentResolver().delete(this.uri, null, null);
 	}
-	
-	public Cursor getAll(){
+
+	public Cursor getAll() {
 		return queryUri(null, null);
 	}
 

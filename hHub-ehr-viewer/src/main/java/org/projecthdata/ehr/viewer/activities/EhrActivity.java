@@ -79,7 +79,7 @@ public class EhrActivity extends FragmentActivity implements
 		setContentView(R.layout.ehr);
 
 		this.weightFragment = new WeightFragment();
-		this.weightFragment = new WeightFragment();
+		this.patientFragment = new PatientFragment();
 		mAdapter = new MyAdapter(getSupportFragmentManager(), this);
 
 		mPager = (ViewPager) findViewById(R.id.ehr_view_pager);
@@ -186,7 +186,13 @@ public class EhrActivity extends FragmentActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (MENU_TITLE_REFRESH.equals(item.getTitle())) {
 			startService(new Intent(this, HDataSyncService.class));
-		} else if (item.getTitle().equals(CLEAR_DATA_TITLE)) {
+		} 
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		if (item.getTitle().equals(CLEAR_DATA_TITLE)) {
 			onClearDataMenuItem();
 		} else if (item.getTitle().equals(LOGOUT_TITLE)) {
 			onLogoutMenuItem();
@@ -194,12 +200,12 @@ public class EhrActivity extends FragmentActivity implements
 		return true;
 	}
 	
+	
 	private void onLogoutMenuItem(){
-		//remove the OAuth connection
-		Connection<HData> connection = this.connectionRepository.getPrimaryConnection(HData.class);
-		if(connection != null){
-			this.connectionRepository.removeConnection(connection.getKey());
-		}
+		
+		String providerId = this.getApplicationContext().getConnectionFactoryRegistry().getConnectionFactory(HData.class).getProviderId();
+		connectionRepository.removeConnections(providerId);
+		
 		//clear out all data too
 		clearAllData();
 		//close this Activity (which should close the whole app)
@@ -224,7 +230,9 @@ public class EhrActivity extends FragmentActivity implements
 			editor.remove(Constants.PREF_PATIENT_NAME_LASTNAME)
 					.remove(Constants.PREF_PATIENT_NAME_GIVEN)
 					.remove(Constants.PREF_PATIENT_NAME_SUFFIX)
-					.remove(Constants.PREF_PATIENT_ID).commit();
+					.remove(Constants.PREF_PATIENT_ID)
+					.remove(Constants.PREF_EHR_URL)
+					.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -245,5 +253,9 @@ public class EhrActivity extends FragmentActivity implements
 	public void setPatientFragment(PatientFragment patientFragment) {
 		this.patientFragment = patientFragment;
 	}
-
+	
+	@Override
+	public HHubApplication getApplicationContext() {
+		return (HHubApplication) super.getApplicationContext();
+	}
 }

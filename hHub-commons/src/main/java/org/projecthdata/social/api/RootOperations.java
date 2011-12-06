@@ -19,9 +19,10 @@ package org.projecthdata.social.api;
 import org.projecthdata.social.api.atom.AtomFeed;
 import org.springframework.web.client.RestTemplate;
 
-
 public interface RootOperations {
-    public Root getRoot();
-    public AtomFeed getSectionFeed(Section section);
-    public RestTemplate getRestTemplate();
+	public Root getRoot();
+
+	public AtomFeed getSectionFeed(Section section);
+
+	public RestTemplate getRestTemplate();
 }

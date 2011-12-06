@@ -27,38 +27,39 @@ import android.view.View;
 import android.widget.EditText;
 
 /**
- * Prompts the user to enter and save a URL for the Electronic Health Record (EHR)
- * that they wish to access
+ * Prompts the user to enter and save a URL for the Electronic Health Record
+ * (EHR) that they wish to access
  * 
  * @author Eric Levine
- *
+ * 
  */
 public class EhrUrlFormActivity extends FragmentActivity {
 	public static final String EXTRA_EHR_URL = "ehrUrl";
-    private SharedPreferences prefs = null;
-    
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ehr_url_form);
-        this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
-        String ehrUrl = getIntent().getExtras().getString(EXTRA_EHR_URL);
-        if(ehrUrl != null){
-        	((EditText)findViewById(R.id.hrf_url_edit_text)).setText(ehrUrl);
-        }
-        
-    }
+	private SharedPreferences prefs = null;
 
-    public void onSaveButton(View v) {
-        SharedPreferences.Editor editor = this.prefs.edit();
-        String ehrUrl = ((EditText)findViewById(R.id.hrf_url_edit_text)).getText().toString();
-        editor.putString(Constants.PREF_EHR_URL, ehrUrl);
-        editor.commit();
-        
-        //whoever started this activity should be expecting to get this result after we are finished
-        setResult(Constants.RESULT_SAVED);
-        finish();
-    }
-    
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.ehr_url_form);
+		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		if (getIntent().hasExtra(EXTRA_EHR_URL)) {
+			String ehrUrl = getIntent().getExtras().getString(EXTRA_EHR_URL);
+
+			((EditText) findViewById(R.id.hrf_url_edit_text)).setText(ehrUrl);
+
+		}
+	}
+
+	public void onSaveButton(View v) {
+		SharedPreferences.Editor editor = this.prefs.edit();
+		String ehrUrl = ((EditText) findViewById(R.id.hrf_url_edit_text))
+				.getText().toString();
+		editor.putString(Constants.PREF_EHR_URL, ehrUrl);
+		editor.commit();
+
+		// whoever started this activity should be expecting to get this result
+		// after we are finished
+		setResult(Constants.RESULT_SAVED);
+		finish();
+	}
 
 }

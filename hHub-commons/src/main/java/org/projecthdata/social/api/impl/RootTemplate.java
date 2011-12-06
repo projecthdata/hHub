@@ -32,20 +32,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class RootTemplate extends AbstractHDataOperations implements RootOperations {
-    private final RestTemplate restTemplate;
-    private final HData hData;
-    private HttpEntity<?> atomFeedRequestEntity = null;
-    private URI ehrUri = null;
-    private static final String ROOT_PATH = "root.xml";
+public class RootTemplate extends AbstractHDataOperations implements
+		RootOperations {
+	private final RestTemplate restTemplate;
+	private final HData hData;
+	private HttpEntity<?> atomFeedRequestEntity = null;
+	private URI ehrUri = null;
+	private static final String ROOT_PATH = "root.xml";
 
-    public RootTemplate(HData hData, RestTemplate restTemplate, boolean isAuthorizedForUser) {
-        super(isAuthorizedForUser);
-        this.restTemplate = restTemplate;
-        this.hData = hData;
-        this.ehrUri = URI.create(hData.getEhrUrl());
-        
-    	// setup the correct accept headers for processing an atom feed
+	public RootTemplate(HData hData, RestTemplate restTemplate,
+			boolean isAuthorizedForUser) {
+		super(isAuthorizedForUser);
+		this.restTemplate = restTemplate;
+		this.hData = hData;
+		this.ehrUri = URI.create(hData.getEhrUrl());
+
+		// setup the correct accept headers for processing an atom feed
 		List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
 		acceptableMediaTypes.add(MediaType.APPLICATION_ATOM_XML);
 		acceptableMediaTypes.add(MediaType.APPLICATION_XML);
@@ -54,44 +56,43 @@ public class RootTemplate extends AbstractHDataOperations implements RootOperati
 		requestHeaders.setAccept(acceptableMediaTypes);
 
 		this.atomFeedRequestEntity = new HttpEntity<Object>(requestHeaders);
-        
 
-    }
+	}
 
-    public Root getRoot() {
-        String url = ehrUri.toString() + "/" + ROOT_PATH;
-        return restTemplate.getForObject(url, Root.class);
-    }
-    
-    /**
-     * Retrieves the atom feed for a given section
-     *    
-     * @param section
-     * @return
-     */
-    public AtomFeed getSectionFeed(Section section){
-    	String url = ehrUri.toString() + "/" + section.getPath();
-    	return getForAtomFeed(url);
-    }
-    
+	public Root getRoot() {
+		String url = ehrUri.toString() + "/" + ROOT_PATH;
+		return restTemplate.getForObject(url, Root.class);
+	}
 
-    /**
-     * Adds the correct accept header for a GET request of an atom feed
-     *
-     * @param url - the URL of the feed to request
-     * @return
-     */
-    public AtomFeed getForAtomFeed(String url) {
-        ResponseEntity<AtomFeed> response = restTemplate.exchange(url, HttpMethod.GET,
-                atomFeedRequestEntity, AtomFeed.class);
-        AtomFeed feed = null;
-        try {
-            feed = response.getBody();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return feed;
-    }
+	/**
+	 * Retrieves the atom feed for a given section
+	 * 
+	 * @param section
+	 * @return
+	 */
+	public AtomFeed getSectionFeed(Section section) {
+		String url = ehrUri.toString() + "/" + section.getPath();
+		return getForAtomFeed(url);
+	}
+
+	/**
+	 * Adds the correct accept header for a GET request of an atom feed
+	 * 
+	 * @param url
+	 *            - the URL of the feed to request
+	 * @return
+	 */
+	public AtomFeed getForAtomFeed(String url) {
+		ResponseEntity<AtomFeed> response = restTemplate.exchange(url,
+				HttpMethod.GET, atomFeedRequestEntity, AtomFeed.class);
+		AtomFeed feed = null;
+		try {
+			feed = response.getBody();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return feed;
+	}
 
 	@Override
 	public RestTemplate getRestTemplate() {

@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -45,174 +46,185 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 /**
- * With code from: https://github.com/SpringSource/spring-android-samples/blob/master/spring-android-showcase/client/src/org/springframework/android/showcase/AbstractWebViewActivity.java
+ * With code from:
+ * https://github.com/SpringSource/spring-android-samples/blob/master
+ * /spring-android-showcase/client/src/org/springframework/android/showcase/
+ * AbstractWebViewActivity.java
  */
 public class HDataWebOauthActivity extends Activity {
-	public static final Integer RESULT_CODE_SUCCESS=200;
-	public static final Integer RESULT_CODE_FAILURE=400;
-	
-    public static String EXTRA_EHR_URL = "ehrUrl";
+	public static final Integer RESULT_CODE_SUCCESS = 200;
+	public static final Integer RESULT_CODE_FAILURE = 400;
 
-    protected static final String TAG = HDataWebOauthActivity.class.getSimpleName();
-    private String redirectUri = "hstore://projecthdata.org";
+	public static String EXTRA_EHR_URL = "ehrUrl";
 
+	protected static final String TAG = HDataWebOauthActivity.class
+			.getSimpleName();
+	private String redirectUri = "hstore://projecthdata.org";
 
+	private Activity activity;
+	private WebView webView;
+	private ProgressDialog progressDialog = null;
+	private boolean _destroyed = false;
+	private ConnectionRepository connectionRepository;
+	private HDataConnectionFactory hDataConnectionFactory;
 
-    private Activity activity;
-    private WebView webView;
-    private ProgressDialog progressDialog = null;
-    private boolean _destroyed = false;
-    private ConnectionRepository connectionRepository;
-    private HDataConnectionFactory hDataConnectionFactory;
+	// an Activity Intent to start when the OAuth handshake has been completed
+	private Intent callbackActivityIntent = null;
+	// a Sevice Intent to start when the OAuth handshake has been completed
+	private Intent callbackServiceIntent = null;
+	private String ehrUrl = null;
 
-    //an Activity Intent to start when the OAuth handshake has been completed
-    private Intent callbackActivityIntent = null;
-    //a Sevice Intent to start when the OAuth handshake has been completed
-    private Intent callbackServiceIntent = null;
-    private String ehrUrl = null;
+	//
+	// private connectionFactory;
+	// ***************************************
+	// Activity methods
+	// ***************************************
 
-//
-//    private  connectionFactory;
-    // ***************************************
-    // Activity methods
-    // ***************************************
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		getWindow().requestFeature(Window.FEATURE_PROGRESS);
+		getWindow().setFeatureInt(Window.FEATURE_PROGRESS,
+				Window.PROGRESS_VISIBILITY_ON);
+		super.onCreate(savedInstanceState);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-        getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
-    	super.onCreate(savedInstanceState);
+		webView = new WebView(this);
+		setContentView(webView);
+		this.ehrUrl = getIntent().getStringExtra(EXTRA_EHR_URL);
 
+		activity = this;
 
+		this.connectionRepository = getApplicationContext()
+				.getConnectionRepository();
+		this.hDataConnectionFactory = getApplicationContext()
+				.getHDataConnectionFactory(ehrUrl);
 
-        webView = new WebView(this);
-        setContentView(webView);
-        this.ehrUrl = getIntent().getStringExtra(EXTRA_EHR_URL);
+		webView.setWebChromeClient(new WebChromeClient() {
 
-        activity = this;
+			public void onProgressChanged(WebView view, int progress) {
+				activity.setTitle("Loading...");
+				activity.setProgress(progress * 100);
+				if (progress == 100) {
+					activity.setTitle(R.string.app_name);
+				}
+			}
+		});
+		webView.setWebViewClient(new MyWebViewClient());
 
-        this.connectionRepository = getApplicationContext().getConnectionRepository();
-        this.hDataConnectionFactory =  getApplicationContext().getHDataConnectionFactory(ehrUrl);
+		// clear out any previously used credentials
+		webView.clearCache(true);
+		webView.clearFormData();
+		webView.clearHistory();
+		webView.getSettings().setSavePassword(false);
+		webView.getSettings().setSaveFormData(false);
+		CookieSyncManager.createInstance(this);
+		CookieManager.getInstance().removeAllCookie();
+	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		// display the authorization page
+		getWebView().loadUrl(getAuthorizeUrl());
+	}
 
-        webView.setWebChromeClient(new WebChromeClient() {
+	private String getAuthorizeUrl() {
 
-            public void onProgressChanged(WebView view, int progress) {
-                activity.setTitle("Loading...");
-                activity.setProgress(progress * 100);
-                if (progress == 100) {
-                    activity.setTitle(R.string.app_name);
-                }
-            }
-        });
-        webView.setWebViewClient(new MyWebViewClient());
-        
-        //clear out any previously used credentials
-        webView.clearCache(true);
-        webView.clearFormData();
-        webView.clearHistory();
-        webView.getSettings().setSavePassword(false);
-        webView.getSettings().setSaveFormData(false);
-        CookieManager.getInstance().removeAllCookie();
-    }
+		String type = "web_server";
+		String state = "foo";
+		OAuth2Parameters params = new OAuth2Parameters();
+		params.setRedirectUri(redirectUri);
+		params.setState(state);
+		params.add("type", type);
+		return hDataConnectionFactory.getOAuthOperations().buildAuthorizeUrl(
+				GrantType.AUTHORIZATION_CODE, params);
+	}
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // display the authorization page
-        getWebView().loadUrl(getAuthorizeUrl());
-    }
+	// ***************************************
+	// Protected methods
+	// ***************************************
+	protected WebView getWebView() {
+		return webView;
+	}
 
-    private String getAuthorizeUrl() {
+	// ***************************************
+	// Public methods
+	// ***************************************
+	public void showLoadingProgressDialog() {
+		showProgressDialog("Loading. Please wait...");
+	}
 
-        String type = "web_server";
-        String state = "foo";
-        OAuth2Parameters params = new OAuth2Parameters();
-        params.setRedirectUri(redirectUri);
-        params.setState(state);
-        params.add("type", type);
-        return hDataConnectionFactory.getOAuthOperations().buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, params);
-    }
+	public void showProgressDialog(CharSequence message) {
+		if (progressDialog == null) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setIndeterminate(true);
+		}
 
+		progressDialog.setMessage(message);
+		progressDialog.show();
+	}
 
-    // ***************************************
-    // Protected methods
-    // ***************************************
-    protected WebView getWebView() {
-        return webView;
-    }
+	public void dismissProgressDialog() {
+		if (progressDialog != null && !_destroyed) {
+			progressDialog.dismiss();
+		}
+	}
 
-    // ***************************************
-    // Public methods
-    // ***************************************
-    public void showLoadingProgressDialog() {
-        showProgressDialog("Loading. Please wait...");
-    }
+	private class MyWebViewClient extends WebViewClient {
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			Uri uri = Uri.parse(url);
+			String authCode = uri.getQueryParameter("code");
 
-    public void showProgressDialog(CharSequence message) {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setIndeterminate(true);
-        }
+			/*
+			 * if there was an error with the oauth process, return the error
+			 * description
+			 * 
+			 * The error query string will look like this:
+			 * 
+			 * ?error_reason=user_denied&error=access_denied&error_description=The
+			 * +user+denied+your+request
+			 */
+			if (uri.getQueryParameter("error") != null) {
+				CharSequence errorReason = uri.getQueryParameter(
+						"error_description").replace("+", " ");
+				Toast.makeText(getApplicationContext(), errorReason,
+						Toast.LENGTH_LONG).show();
+				setResult(RESULT_CODE_FAILURE);
+				finish();
+			} else if (authCode != null) {
+				// Spring is throwing an exception from the server response. It
+				// is likely because
+				// expires_in is coming back as a JSON string instead of a
+				// number. Otherwise, we should be using:
+				// hDataConnectionFactory.getOAuthOperations().exchangeForAccess(authCode,
+				// redirect_uri, params);
 
-        progressDialog.setMessage(message);
-        progressDialog.show();
-    }
+				MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+				params.add("client_id", hDataConnectionFactory.getClientId());
+				params.add("grant_type", "authorization_code");
+				params.add("client_secret",
+						hDataConnectionFactory.getClientSecret());
+				AccessGrant accessGrant = hDataConnectionFactory
+						.getOAuthOperations().exchangeForAccess(authCode,
+								redirectUri, params);
 
-    public void dismissProgressDialog() {
-        if (progressDialog != null && !_destroyed) {
-            progressDialog.dismiss();
-        }
-    }
+				Connection<HData> connection = hDataConnectionFactory
+						.createConnection(accessGrant);
 
-    private class MyWebViewClient extends WebViewClient {
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Uri uri = Uri.parse(url);
-            String authCode = uri.getQueryParameter("code");
+				try {
+					connectionRepository.addConnection(connection);
+				} catch (DuplicateConnectionException e) {
+					// connection already exists in repository!
+				}
 
+				setResult(RESULT_CODE_SUCCESS);
+				finish();
+			}
+		}
+	}
 
-            /*
-            * if there was an error with the oauth process, return the error
-            * description
-            *
-            * The error query string will look like this:
-            *
-            * ?error_reason=user_denied&error=access_denied&error_description=The
-            * +user+denied+your+request
-            */
-            if (uri.getQueryParameter("error") != null) {
-                CharSequence errorReason = uri.getQueryParameter("error_description").replace("+", " ");
-                Toast.makeText(getApplicationContext(), errorReason, Toast.LENGTH_LONG).show();
-                setResult(RESULT_CODE_FAILURE);
-                finish();
-            } else if (authCode != null) {
-                //Spring is throwing an exception from the server response.  It is likely because
-                //expires_in is coming back as a JSON string instead of a number.  Otherwise, we should be using:
-                //  hDataConnectionFactory.getOAuthOperations().exchangeForAccess(authCode, redirect_uri, params);
-
-                MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-                params.add("client_id", hDataConnectionFactory.getClientId());
-                params.add("grant_type", "authorization_code");
-                params.add("client_secret", hDataConnectionFactory.getClientSecret());
-                AccessGrant accessGrant =  hDataConnectionFactory.getOAuthOperations().exchangeForAccess(authCode, redirectUri, params);
-
-                Connection<HData> connection = hDataConnectionFactory.createConnection(accessGrant);
-
-                try {
-                    connectionRepository.addConnection(connection);
-                } catch (DuplicateConnectionException e) {
-                    // connection already exists in repository!
-                }
-                
-                setResult(RESULT_CODE_SUCCESS);
-                finish();
-            }
-        }
-    }
-
-       @Override
-    public HHubApplication getApplicationContext() {
-        return (HHubApplication) super.getApplicationContext();
-    }
+	@Override
+	public HHubApplication getApplicationContext() {
+		return (HHubApplication) super.getApplicationContext();
+	}
 }

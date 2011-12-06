@@ -34,6 +34,7 @@
         </activity>
         <activity android:name=".EhrActivity" />
         <activity android:name="org.projecthdata.hhub.ui.HDataWebOauthActivity" />
+        <service android:name=".service.SyncService" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

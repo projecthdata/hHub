@@ -21,24 +21,27 @@ import org.simpleframework.xml.Root;
 
 import android.net.Uri;
 
-@Root(name="patient",strict=false)
+@Root(name = "patient", strict = false)
 public class Patient {
-	
+
 	@Element
 	public String id;
-	
-	@Element(name="given") @Path("name")
+
+	@Element(name = "given")
+	@Path("name")
 	public String givenName;
-	
-	@Element @Path("name")
+
+	@Element
+	@Path("name")
 	public String lastname;
-	
-	@Element(required=false) @Path("name")
+
+	@Element(required = false)
+	@Path("name")
 	public String suffix;
-	
+
 	private String documentUri = null;
 	private String hStoreId = null;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -92,9 +95,5 @@ public class Patient {
 	public void sethStoreId(String hStoreId) {
 		this.hStoreId = hStoreId;
 	}
-	
-	
-	
-	
-	
+
 }

@@ -17,9 +17,10 @@
 package org.projecthdata.hhub.util;
 
 public class DropBoxMessengerHelper {
-	//a request to GET a resource
+	// a request to GET a resource
 	public static final int MSG_GET = 1;
-	//this message contains a Uri to monitor for the status of a network operation
+	// this message contains a Uri to monitor for the status of a network
+	// operation
 	public static final int MSG_STATUS_URI = 2;
 	public static final String DATA_LOCAL_URI = "localUri";
 	public static final String DATA_REMOTE_URI = "remoteUri";

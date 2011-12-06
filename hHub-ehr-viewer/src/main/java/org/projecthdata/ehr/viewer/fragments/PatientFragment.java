@@ -24,6 +24,7 @@ import org.projecthdata.hhub.HHubApplication;
 import org.projecthdata.social.api.HData;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.web.client.RestClientException;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -127,29 +128,38 @@ public class PatientFragment extends Fragment implements
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			String imageUrl = prefs.getString(Constants.PREF_PATIENT_PHOTO_URL,
-					null);
+			try {
+				String imageUrl = prefs.getString(
+						Constants.PREF_PATIENT_PHOTO_URL, null);
 
-			if (imageUrl != null) {
-				// grab that document and parse out the patient info
-				Connection<HData> connection = connectionRepository
-						.getPrimaryConnection(HData.class);
+				if (imageUrl != null) {
+					// grab that document and parse out the patient info
+					Connection<HData> connection = connectionRepository
+							.getPrimaryConnection(HData.class);
 
-				byte[] raw = connection.getApi().getRootOperations()
-						.getRestTemplate().getForObject(imageUrl, byte[].class);
+					byte[] raw = connection.getApi().getRootOperations()
+							.getRestTemplate()
+							.getForObject(imageUrl, byte[].class);
 
-				this.drawable = Drawable.createFromStream(
-						new ByteArrayInputStream(raw), "src name");
+					this.drawable = Drawable.createFromStream(
+							new ByteArrayInputStream(raw), "src name");
+				}
+			} catch (RestClientException e) {
+				e.printStackTrace();
 			}
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (drawable != null) {
-				ImageView patientImage = (ImageView) getActivity()
-						.findViewById(R.id.patient_image);
-				patientImage.setImageDrawable(drawable);
+			try {
+				if (drawable != null) {
+					ImageView patientImage = (ImageView) getActivity()
+							.findViewById(R.id.patient_image);
+					patientImage.setImageDrawable(drawable);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 

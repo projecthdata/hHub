@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 package org.projecthdata.hdata.model;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-@Root(name="allergy", strict=false)
+@Root(name = "allergy", strict = false)
 public class Allergy {
-	
+
 	@Element
 	private Information adverseEventType;
 	@Element
@@ -31,7 +32,6 @@ public class Allergy {
 	private Information severity;
 	@Element
 	private Information alertStatus;
-	
 
 	public Information getAdverseEventType() {
 		return adverseEventType;
@@ -73,46 +73,50 @@ public class Allergy {
 		this.adverseEventType = adverseEventType;
 	}
 
-
-	public static class Information{
-		@Attribute(required=false)
+	public static class Information {
+		@Attribute(required = false)
 		private String code;
-		@Attribute(required=false)
+		@Attribute(required = false)
 		private String codeSystem;
-		@Attribute(required=false)
+		@Attribute(required = false)
 		private String displayName;
-		@Attribute(required=false)
+		@Attribute(required = false)
 		private String codeSystemName;
-		
-		
+
 		public String getCode() {
 			return code;
 		}
+
 		public void setCode(String code) {
 			this.code = code;
 		}
+
 		public String getCodeSystem() {
 			return codeSystem;
 		}
+
 		public void setCodeSystem(String codeSystem) {
 			this.codeSystem = codeSystem;
 		}
+
 		public String getDisplayName() {
 			return displayName;
 		}
+
 		public void setDisplayName(String displayName) {
 			this.displayName = displayName;
 		}
+
 		public String getCodeSystemName() {
 			return codeSystemName;
 		}
+
 		public void setCodeSystemName(String codeSystemName) {
 			this.codeSystemName = codeSystemName;
 		}
-		
-		
+
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.product.displayName;

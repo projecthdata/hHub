@@ -30,54 +30,65 @@ import android.database.Cursor;
  * @author elevine
  * 
  */
-public class SectionDocMetadataGateway extends TableGateway{
-	
-	public SectionDocMetadataGateway(Context context){
-		super(context, SectionDocMetadata.CONTENT_URI, SectionDocMetadataColumns.getInstance().getAllColumnsProjection());
-	}
-	
+public class SectionDocMetadataGateway extends TableGateway {
 
-	public Cursor findByRootyEntriesIdAndHrfId(Integer rootEntriesId, Integer hrfId) {
-		String[] columns = {SectionDocMetadataColumns.ROOT_ENTRIES_ID, SectionDocMetadataColumns.HRF_ID};
-		String[] selectionArgs = {rootEntriesId.toString(), hrfId.toString()};
+	public SectionDocMetadataGateway(Context context) {
+		super(context, SectionDocMetadata.CONTENT_URI,
+				SectionDocMetadataColumns.getInstance()
+						.getAllColumnsProjection());
+	}
+
+	public Cursor findByRootyEntriesIdAndHrfId(Integer rootEntriesId,
+			Integer hrfId) {
+		String[] columns = { SectionDocMetadataColumns.ROOT_ENTRIES_ID,
+				SectionDocMetadataColumns.HRF_ID };
+		String[] selectionArgs = { rootEntriesId.toString(), hrfId.toString() };
 		String selection = buildAndedSelection(Arrays.asList(columns));
 		return super.queryUri(selection, selectionArgs);
 	}
-	
+
 	public Cursor findByExtensionAndHrfId(String extension, Integer hrfId) {
-		String[] columns = {SectionDocMetadataColumns.EXTENSION, SectionDocMetadataColumns.HRF_ID};
-		String[] selectionArgs = {extension, hrfId.toString()};
+		String[] columns = { SectionDocMetadataColumns.EXTENSION,
+				SectionDocMetadataColumns.HRF_ID };
+		String[] selectionArgs = { extension, hrfId.toString() };
 		String selection = buildAndedSelection(Arrays.asList(columns));
 		return super.queryUri(selection, selectionArgs);
 	}
-	
-	public Cursor findByExtensionAndContentTypeAndHrfId(String extension, String contentType, Integer hrfId) {
-		String[] columns = {SectionDocMetadataColumns.EXTENSION, SectionDocMetadataColumns.CONTENT_TYPE, SectionDocMetadataColumns.HRF_ID};
-		String[] selectionArgs = {extension, contentType, hrfId.toString()};
+
+	public Cursor findByExtensionAndContentTypeAndHrfId(String extension,
+			String contentType, Integer hrfId) {
+		String[] columns = { SectionDocMetadataColumns.EXTENSION,
+				SectionDocMetadataColumns.CONTENT_TYPE,
+				SectionDocMetadataColumns.HRF_ID };
+		String[] selectionArgs = { extension, contentType, hrfId.toString() };
 		String selection = buildAndedSelection(Arrays.asList(columns));
 		return super.queryUri(selection, selectionArgs);
 	}
-	
-	public Cursor findByLinkContentTypeAndExtensionAndHrfI(String linkPattern, String extension, String contentType, Integer hrfId){
-		String[] columns = {SectionDocMetadataColumns.EXTENSION, SectionDocMetadataColumns.CONTENT_TYPE, SectionDocMetadataColumns.HRF_ID};
+
+	public Cursor findByLinkContentTypeAndExtensionAndHrfI(String linkPattern,
+			String extension, String contentType, Integer hrfId) {
+		String[] columns = { SectionDocMetadataColumns.EXTENSION,
+				SectionDocMetadataColumns.CONTENT_TYPE,
+				SectionDocMetadataColumns.HRF_ID };
 		String selection = buildAndedSelection(Arrays.asList(columns));
 		selection += " AND " + SectionDocMetadataColumns.LINK + " LIKE ?";
-		String[] selectionArgs = {extension, contentType, hrfId.toString(), linkPattern};
+		String[] selectionArgs = { extension, contentType, hrfId.toString(),
+				linkPattern };
 		return super.queryUri(selection, selectionArgs);
 	}
-	
-	public Cursor findByLink(String link){
-		String[] columns = {SectionDocMetadataColumns.LINK};
-		String[] selectionArgs = {link};
+
+	public Cursor findByLink(String link) {
+		String[] columns = { SectionDocMetadataColumns.LINK };
+		String[] selectionArgs = { link };
 		String selection = buildAndedSelection(Arrays.asList(columns));
 		return super.queryUri(selection, selectionArgs);
 	}
-	
-	public int deleteByHrfId(Integer hrfId){
-		String[] columns = {SectionDocMetadataColumns.HRF_ID};
-		String[] selectionArgs = new String[]{hrfId.toString()};
+
+	public int deleteByHrfId(Integer hrfId) {
+		String[] columns = { SectionDocMetadataColumns.HRF_ID };
+		String[] selectionArgs = new String[] { hrfId.toString() };
 		String selection = buildAndedSelection(Arrays.asList(columns));
 		return super.delete(selection, selectionArgs);
 	}
-	
+
 }

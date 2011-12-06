@@ -24,68 +24,68 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable
 public class SectionDocMetadata {
-    @DatabaseField(generatedId = true)
-    private int _id;
-    @DatabaseField
-    private String link;
-    @DatabaseField
-    private String updated;
-    @DatabaseField
-    private String contentType;
-    @DatabaseField
-    private String title;
-    @DatabaseField
-    private String extension;
-    @DatabaseField(canBeNull = false, foreign = true)
-    private RootEntry rootEntry=null;
-    
-    public int get_id() {
-        return _id;
-    }
+	@DatabaseField(generatedId = true)
+	private int _id;
+	@DatabaseField
+	private String link;
+	@DatabaseField
+	private String updated;
+	@DatabaseField
+	private String contentType;
+	@DatabaseField
+	private String title;
+	@DatabaseField
+	private String extension;
+	@DatabaseField(canBeNull = false, foreign = true)
+	private RootEntry rootEntry = null;
 
-    public void set_id(int _id) {
-        this._id = _id;
-    }
+	public int get_id() {
+		return _id;
+	}
 
-    public String getLink() {
-        return link;
-    }
+	public void set_id(int _id) {
+		this._id = _id;
+	}
 
-    public void setLink(String link) {
-        this.link = link;
-    }
+	public String getLink() {
+		return link;
+	}
 
-    public String getUpdated() {
-        return updated;
-    }
+	public void setLink(String link) {
+		this.link = link;
+	}
 
-    public void setUpdated(String updated) {
-        this.updated = updated;
-    }
+	public String getUpdated() {
+		return updated;
+	}
 
-    public String getContentType() {
-        return contentType;
-    }
+	public void setUpdated(String updated) {
+		this.updated = updated;
+	}
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
+	public String getContentType() {
+		return contentType;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getExtension() {
-        return extension;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
 
 	public RootEntry getRootEntry() {
 		return rootEntry;
@@ -94,12 +94,12 @@ public class SectionDocMetadata {
 	public void setRootEntry(RootEntry rootEntry) {
 		this.rootEntry = rootEntry;
 	}
-	
-	public void copy(Entry atomFeedEntry){
+
+	public void copy(Entry atomFeedEntry) {
 		this.setLink(atomFeedEntry.getLinkHref());
 		this.setContentType(atomFeedEntry.getLinkType());
 		this.setTitle(atomFeedEntry.getTitle());
 		this.setUpdated(atomFeedEntry.getUpdated());
 	}
-    
+
 }

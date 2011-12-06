@@ -21,15 +21,17 @@
 // Generated on: 2011.06.16 at 09:42:47 PM EDT 
 //
 
-
 package org.projecthdata.social.api;
+
 import org.simpleframework.xml.*;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType>
@@ -44,87 +46,77 @@ import org.simpleframework.xml.*;
  * 
  */
 
-@org.simpleframework.xml.Root(strict=false)
-
+@org.simpleframework.xml.Root(strict = false)
 public class Extension {
 
-    @Text
-    protected String content;
-    @Attribute
-    protected String contentType;
-    @Attribute(required = true)
-    protected String extensionId;
+	@Text
+	protected String content;
+	@Attribute
+	protected String contentType;
+	@Attribute(required = true)
+	protected String extensionId;
 
-    /**
-     * Gets the value of the content property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getContent() {
-        return content;
-    }
+	/**
+	 * Gets the value of the content property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getContent() {
+		return content;
+	}
 
-    /**
-     * Sets the value of the content property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setContent(String value) {
-        this.content = value;
-    }
+	/**
+	 * Sets the value of the content property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setContent(String value) {
+		this.content = value;
+	}
 
-    /**
-     * Gets the value of the contentType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getContentType() {
-        return contentType;
-    }
+	/**
+	 * Gets the value of the contentType property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getContentType() {
+		return contentType;
+	}
 
-    /**
-     * Sets the value of the contentType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setContentType(String value) {
-        this.contentType = value;
-    }
+	/**
+	 * Sets the value of the contentType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setContentType(String value) {
+		this.contentType = value;
+	}
 
-    /**
-     * Gets the value of the extensionId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExtensionId() {
-        return extensionId;
-    }
+	/**
+	 * Gets the value of the extensionId property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getExtensionId() {
+		return extensionId;
+	}
 
-    /**
-     * Sets the value of the extensionId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExtensionId(String value) {
-        this.extensionId = value;
-    }
+	/**
+	 * Sets the value of the extensionId property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setExtensionId(String value) {
+		this.extensionId = value;
+	}
 
 }

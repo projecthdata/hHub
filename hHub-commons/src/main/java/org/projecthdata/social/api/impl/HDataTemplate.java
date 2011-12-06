@@ -22,36 +22,35 @@ import org.springframework.http.converter.xml.SimpleXmlHttpMessageConverter;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.oauth2.OAuth2Version;
 
-public class HDataTemplate extends AbstractOAuth2ApiBinding implements HData{
+public class HDataTemplate extends AbstractOAuth2ApiBinding implements HData {
 
+	private RootOperations rootOperations = null;
+	// url of the electronic health record
+	private final String ehrUrl;
 
-    private RootOperations rootOperations= null;
-    //url of the electronic health record
-    private final String ehrUrl;
-
-    public HDataTemplate(String accessToken, String ehrUrl){
-        super(accessToken);
-        this.ehrUrl = ehrUrl;
-        this.getRestTemplate().getMessageConverters().add(new SimpleXmlHttpMessageConverter());
+	public HDataTemplate(String accessToken, String ehrUrl) {
+		super(accessToken);
+		this.ehrUrl = ehrUrl;
+		this.getRestTemplate().getMessageConverters()
+				.add(new SimpleXmlHttpMessageConverter());
 	}
 
+	@Override
+	public String getEhrUrl() {
+		return this.ehrUrl;
+	}
 
+	public RootOperations getRootOperations() {
+		if (this.rootOperations == null) {
+			rootOperations = new RootTemplate(this, this.getRestTemplate(),
+					isAuthorized());
+		}
+		return rootOperations;
+	}
 
-    @Override
-    public String getEhrUrl() {
-        return this.ehrUrl;
-    }
-
-    public RootOperations getRootOperations(){
-        if(this.rootOperations == null){
-            rootOperations = new RootTemplate(this, this.getRestTemplate(), isAuthorized());
-        }
-        return rootOperations;
-    }
-    
-    @Override
-    protected OAuth2Version getOAuth2Version() {
-    	return OAuth2Version.DRAFT_10;
-    }
+	@Override
+	protected OAuth2Version getOAuth2Version() {
+		return OAuth2Version.DRAFT_10;
+	}
 
 }

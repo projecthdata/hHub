@@ -108,16 +108,16 @@ public class WeightTrackerActivity extends FragmentActivity implements
 				.getConnectionRepository();
 		this.ormManager = new OrmManager(this);
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
-		
-		//if the data string is present, then it contains the EHR URL.  
-		//This is probably coming from a scanned QR code.  Start the activity to
-		//save the EHR URL and kickoff the OAuth handshake
-		if(getIntent().getDataString() != null){
+
+		// if the data string is present, then it contains the EHR URL.
+		// This is probably coming from a scanned QR code. Start the activity to
+		// save the EHR URL and kickoff the OAuth handshake
+		if (getIntent().getDataString() != null) {
 			Intent ehrIntent = new Intent(this, EhrActivity.class);
-			ehrIntent.putExtra(EhrActivity.EXTRA_EHR_URL, getIntent().getDataString());
+			ehrIntent.putExtra(EhrActivity.EXTRA_EHR_URL, getIntent()
+					.getDataString());
 			startActivityForResult(ehrIntent, REQUEST_CODE_EHR);
 		}
-		
 
 	}
 
@@ -141,9 +141,9 @@ public class WeightTrackerActivity extends FragmentActivity implements
 			getDatabaseHelper().getWeightDao().create(reading);
 			// go back to displaying the weight list
 			getSupportFragmentManager().popBackStack();
-			
-			//hide the soft keyboard
-			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+			// hide the soft keyboard
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(weightEditText.getWindowToken(), 0);
 
 		} catch (SQLException e) {
@@ -214,9 +214,8 @@ public class WeightTrackerActivity extends FragmentActivity implements
 		String ehrUrl = prefs.getString(Constants.PREF_EHR_URL, null);
 		if (ehrUrl != null) {
 			if (isConnected()) {
-				Connection<HData> connection = connectionRepository
-						.findPrimaryConnection(HData.class);
-				connectionRepository.removeConnection(connection.getKey());
+				String providerId = this.getApplicationContext().getConnectionFactoryRegistry().getConnectionFactory(HData.class).getProviderId();
+				connectionRepository.removeConnections(providerId);
 			}
 		}
 		finish();
@@ -228,7 +227,8 @@ public class WeightTrackerActivity extends FragmentActivity implements
 
 		// if the URL to the EHR exists, setup the connection and start the
 		// browser activity
-		if (ehrUrl != null) {
+		if (ehrUrl != null){
+			addConnectionFactory();
 			if (isConnected()) {
 				startService(new Intent(this, SyncService.class));
 			} else {
@@ -254,7 +254,7 @@ public class WeightTrackerActivity extends FragmentActivity implements
 		} catch (IllegalArgumentException e) {
 			// expected if there is already a ConnectionFactory for this url
 		}
-		
+
 	}
 
 	@Override
@@ -271,7 +271,7 @@ public class WeightTrackerActivity extends FragmentActivity implements
 			}
 		} else if (requestCode == REQUEST_CODE_OAUTH) {
 			if (resultCode == HDataWebOauthActivity.RESULT_CODE_SUCCESS) {
-				// TODO: start service
+				startService(new Intent(this, SyncService.class));
 			}
 		}
 
@@ -291,8 +291,14 @@ public class WeightTrackerActivity extends FragmentActivity implements
 	}
 
 	private boolean isConnected() {
-		Connection<HData> connection = connectionRepository
-				.findPrimaryConnection(HData.class);
+		Connection<HData> connection = null;
+		try {
+			connection = connectionRepository
+					.findPrimaryConnection(HData.class);
+		} catch (IllegalArgumentException e) {
+			String message = Log.getStackTraceString(e);
+			Log.w(getClass().getSimpleName(), message);
+		}
 		return (connection != null);
 	}
 

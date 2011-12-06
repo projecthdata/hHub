@@ -25,78 +25,77 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "root_entries")
 public class RootEntry {
-    //by default, column names match the variable names
+	// by default, column names match the variable names
 	public static final String COLUMN_NAME_EXTENSION = "extension";
-    public static final String COLUMN_NAME_CONTENT_TYPE = "contentType";
-    public static final String COLUMN_PATH = "path";		
-	
+	public static final String COLUMN_NAME_CONTENT_TYPE = "contentType";
+	public static final String COLUMN_PATH = "path";
+
 	@DatabaseField(generatedId = true)
-    private int _id;
+	private int _id;
 
-    /**
-     * Unique identifier for the extension. Could be a URL to it's schema *
-     */
-    @DatabaseField
-    private String extension = null;
-    /**
-     * A local identifier for this extension, which is unique within the
-     * root document
-     */
-    @DatabaseField
-    private int extensionId;
+	/**
+	 * Unique identifier for the extension. Could be a URL to it's schema *
+	 */
+	@DatabaseField
+	private String extension = null;
+	/**
+	 * A local identifier for this extension, which is unique within the root
+	 * document
+	 */
+	@DatabaseField
+	private int extensionId;
 
-    @DatabaseField
-    private String contentType;
+	@DatabaseField
+	private String contentType;
 
-    /**
-     * relative path to this section
-     */
-    @DatabaseField
-    private String path;
-    
-    @ForeignCollectionField(eager=true)
-    private ForeignCollection<SectionDocMetadata> sectionMetadata =null;
-    
-    
-    public int get_id() {
-        return _id;
-    }
+	/**
+	 * relative path to this section
+	 */
+	@DatabaseField
+	private String path;
 
-    public void set_id(int _id) {
-        this._id = _id;
-    }
+	@ForeignCollectionField(eager = true)
+	private ForeignCollection<SectionDocMetadata> sectionMetadata = null;
 
-    public String getExtension() {
-        return extension;
-    }
+	public int get_id() {
+		return _id;
+	}
 
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
+	public void set_id(int _id) {
+		this._id = _id;
+	}
 
-    public int getExtensionId() {
-        return extensionId;
-    }
+	public String getExtension() {
+		return extension;
+	}
 
-    public void setExtensionId(int extensionId) {
-        this.extensionId = extensionId;
-    }
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
 
-    public String getContentType() {
-        return contentType;
-    }
+	public int getExtensionId() {
+		return extensionId;
+	}
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
+	public void setExtensionId(int extensionId) {
+		this.extensionId = extensionId;
+	}
 
-    public String getPath() {
-        return path;
-    }
+	public String getContentType() {
+		return contentType;
+	}
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 
 	public ForeignCollection<SectionDocMetadata> getSectionMetadata() {
 		return sectionMetadata;
@@ -106,10 +105,9 @@ public class RootEntry {
 			ForeignCollection<SectionDocMetadata> sectionMetadata) {
 		this.sectionMetadata = sectionMetadata;
 	}
-	
-	public void copy(Section section){
-		this.setContentType(section.getExtension()
-				.getContentType());
+
+	public void copy(Section section) {
+		this.setContentType(section.getExtension().getContentType());
 		this.setPath(section.getPath());
 		this.setExtension(section.getExtension().getContent());
 	}

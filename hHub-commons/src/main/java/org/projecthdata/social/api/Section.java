@@ -85,7 +85,6 @@ public class Section {
 	public List<Section> getSections() {
 		return this.sections;
 	}
-	
 
 	/**
 	 * Gets the value of the path property.
@@ -106,15 +105,14 @@ public class Section {
 	 */
 
 	public void setPath(String value) {
-		this.path = value;		
+		this.path = value;
 	}
-	
-	
+
 	/**
-	 * Recursively prepends this sections each child section's path.  
+	 * Recursively prepends this sections each child section's path.
 	 * 
 	 */
-	public void setChildrenPaths(){
+	public void setChildrenPaths() {
 		// prepend this section's path to each child's path
 		if (sections != null) {
 			for (Section section : sections) {
@@ -123,7 +121,7 @@ public class Section {
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the value of the name property.
 	 * 

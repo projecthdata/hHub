@@ -19,11 +19,13 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Path;
 
 public class EffectiveFrequency {
-	
-	@Attribute(name="value") @Path("period")
+
+	@Attribute(name = "value")
+	@Path("period")
 	String period;
-	
-	@Attribute @Path("period")
+
+	@Attribute
+	@Path("period")
 	String unit;
 
 	public String getPeriod() {
@@ -41,6 +43,5 @@ public class EffectiveFrequency {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
-	
+
 }

@@ -27,50 +27,53 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 public class HDataDatabaseHelper extends OrmLiteSqliteOpenHelper {
-    private final String LOG_NAME = getClass().getName();
-    private static final String DATABASE_NAME = "hhub.db";
-    private static final int DATABASE_VERSION = 1;
-    private Dao<RootEntry, Integer> rootEntryDao;
-    private Dao<SectionDocMetadata, Integer> sectionDocMetadataDao;
+	private final String LOG_NAME = getClass().getName();
+	private static final String DATABASE_NAME = "hhub.db";
+	private static final int DATABASE_VERSION = 1;
+	private Dao<RootEntry, Integer> rootEntryDao;
+	private Dao<SectionDocMetadata, Integer> sectionDocMetadataDao;
 
-    public HDataDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+	public HDataDatabaseHelper(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
 
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
-        try {
-            TableUtils.createTable(connectionSource, RootEntry.class);
-            TableUtils.createTable(connectionSource, SectionDocMetadata.class);
-        } catch (SQLException e) {
-            Log.e(LOG_NAME, "Could not create new table ", e);
-        }
-    }
+	@Override
+	public void onCreate(SQLiteDatabase sqLiteDatabase,
+			ConnectionSource connectionSource) {
+		try {
+			TableUtils.createTable(connectionSource, RootEntry.class);
+			TableUtils.createTable(connectionSource, SectionDocMetadata.class);
+		} catch (SQLException e) {
+			Log.e(LOG_NAME, "Could not create new table ", e);
+		}
+	}
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion,
-                          int newVersion) {
-        try {
-            TableUtils.dropTable(connectionSource, RootEntry.class, true);
-            TableUtils.dropTable(connectionSource, SectionDocMetadata.class, true);
-            onCreate(sqLiteDatabase, connectionSource);
-        } catch (SQLException e) {
-            Log.e(LOG_NAME, "Could not upgrade the table for Thing", e);
-        }
+	@Override
+	public void onUpgrade(SQLiteDatabase sqLiteDatabase,
+			ConnectionSource connectionSource, int oldVersion, int newVersion) {
+		try {
+			TableUtils.dropTable(connectionSource, RootEntry.class, true);
+			TableUtils.dropTable(connectionSource, SectionDocMetadata.class,
+					true);
+			onCreate(sqLiteDatabase, connectionSource);
+		} catch (SQLException e) {
+			Log.e(LOG_NAME, "Could not upgrade the table for Thing", e);
+		}
 
-    }
+	}
 
-    public Dao<RootEntry, Integer> getRootEntryDao() throws SQLException {
-        if (rootEntryDao == null) {
-            rootEntryDao = getDao(RootEntry.class);
-        }
-        return rootEntryDao;
-    }
+	public Dao<RootEntry, Integer> getRootEntryDao() throws SQLException {
+		if (rootEntryDao == null) {
+			rootEntryDao = getDao(RootEntry.class);
+		}
+		return rootEntryDao;
+	}
 
-    public Dao<SectionDocMetadata, Integer> getSectionDocMetadataDao() throws SQLException {
-        if (sectionDocMetadataDao == null) {
-            sectionDocMetadataDao = getDao(SectionDocMetadata.class);
-        }
-        return sectionDocMetadataDao;
-    }
+	public Dao<SectionDocMetadata, Integer> getSectionDocMetadataDao()
+			throws SQLException {
+		if (sectionDocMetadataDao == null) {
+			sectionDocMetadataDao = getDao(SectionDocMetadata.class);
+		}
+		return sectionDocMetadataDao;
+	}
 }
